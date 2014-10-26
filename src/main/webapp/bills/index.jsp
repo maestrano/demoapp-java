@@ -34,7 +34,7 @@
 
 	<div class="container" style="margin-top: 60px;">
 		<div class="row">
-			<div class="span8 offset2" style="text-align: center;">
+			<div class="span12" style="text-align: center;">
 				<% if (!loggedIn) { %>
 				<p class="text-error">
 					You need to be logged in to see your Maestrano bills
