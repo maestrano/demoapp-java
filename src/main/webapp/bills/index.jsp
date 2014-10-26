@@ -1,4 +1,6 @@
-<%@ page import="com.maestrano.Maestrano"%>
+<%@ page import="com.maestrano.*"%>
+<%@ page import="com.maestrano.account.*"%>
+<%@ page import="java.util.*"%>
 
 <% HttpSession sess = request.getSession(); %>
 <% Boolean loggedIn = (sess.getAttribute("loggedIn") != null && (Boolean) sess.getAttribute("loggedIn")); %>
@@ -49,7 +51,7 @@
 						</tr>
 					</thead>
 					<tbody>
-						<% for (MnoBill bill : request.getAttribute("billList")) %>
+						<% for (MnoBill bill : (List<MnoBill>) request.getAttribute("billList")) { %>
 						<tr>
 							<td><%= bill.getId() %></td>
 							<td><%= bill.getDescription() %></td>
