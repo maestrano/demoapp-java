@@ -22,7 +22,9 @@
 			<a class="brand" href="/">DemoApp</a>
 			<ul class="nav">
 				<li><a href="/">Home</a></li>
-				<li><a href="/logout">Logout</a></li>
+				<% if (loggedIn) { %>
+					<li><a href="/logout">Logout</a></li>
+				<% } %>
 			</ul>
 		</div>
 	</div>
