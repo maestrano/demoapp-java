@@ -1,7 +1,8 @@
 # Maestrano Java DemoApp
 
 This application shows examples of how to use the Maestrano Java API. A live version of this application is available at this address:
-[http://java-demoapp.maestrano.io/]
+
+http://java-demoapp.maestrano.io/
 
 ## Running the application locally
 
