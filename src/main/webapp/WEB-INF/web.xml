@@ -12,6 +12,16 @@
 		<servlet-name>Maestrano SSO</servlet-name>
 		<servlet-class>com.example.maestrano.SamlSsoServlet</servlet-class>
 	</servlet>
+	
+	<servlet>
+		<servlet-name>App Logout</servlet-name>
+		<servlet-class>com.example.LogoutServlet</servlet-class>
+	</servlet>
+	
+	<servlet-mapping>
+		<servlet-name>App Logout</servlet-name>
+		<url-pattern>/logout</url-pattern>
+	</servlet-mapping>
 
 	<servlet-mapping>
 		<servlet-name>Maestrano SSO</servlet-name>
