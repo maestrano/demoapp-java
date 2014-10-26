@@ -23,7 +23,7 @@
   <div class="container">
     <div class="row">
       <div class="span8 offset2" style="text-align:center;">
-        <% if (request.getSession().getAttribute("loggedIn")) { %>
+        <% if ((Boolean) request.getSession().getAttribute("loggedIn")) { %>
           <h4>Hello, <%= request.getSession().getAttribute("name") %> <%= request.getSession().getAttribute("surname") %></h4>
           <br/>
           <p>You logged in via group <%= request.getSession().getAttribute("groupName") %></p>
