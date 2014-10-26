@@ -1,7 +1,11 @@
 package com.example;
 
+import java.util.Properties;
+
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.webapp.WebAppContext;
+
+import com.maestrano.Maestrano;
 
 /**
  * 
@@ -17,6 +21,13 @@ public class Main {
      */
     public static void main(String[] args) throws Exception{
         String webappDirLocation = "src/main/webapp/";
+        
+        // Configure Maestrano API
+        Properties props = new Properties();
+        props.setProperty("app.environment", "test");
+        props.setProperty("api.id", "app-1");
+		props.setProperty("api.key", "gfcmbu8269wyi0hjazk4t7o1sndpvrqxl53e1");
+		Maestrano.configure(props);
         
         //The port that we should run on can be set into an environment variable
         //Look for that variable and default to 8080 if it isn't there.

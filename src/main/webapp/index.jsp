@@ -20,7 +20,7 @@
     </div>
   </div>
 
-  <div class="container">
+  <div class="container" style="margin-top:60px;">
     <div class="row">
       <div class="span8 offset2" style="text-align:center;">
         <% if (sess.getAttribute("loggedIn") != null && (Boolean) sess.getAttribute("loggedIn")) { %>
