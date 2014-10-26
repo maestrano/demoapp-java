@@ -1,3 +1,5 @@
+<%@ page import="com.maestrano.Maestrano" %>
+
 <% HttpSession sess = request.getSession(); %>
 
 <!doctype html>
@@ -28,7 +30,7 @@
           <br/>
           <p>You logged in via group <%= sess.getAttribute("groupName") %></p>
         <% } else { %>
-          <a class="btn btn-large" href="/maestrano/auth/saml/init">Login</a>
+          <a class="btn btn-large" href="<%= Maestrano.ssoService().getInitPath() %>">Login</a>
         <% } %>
       </div>
     </div>
