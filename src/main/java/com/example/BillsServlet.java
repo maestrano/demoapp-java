@@ -2,7 +2,9 @@ package com.example;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
@@ -19,17 +21,13 @@ private static final long serialVersionUID = 1L;
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		Boolean loggedIn = (req.getSession().getAttribute("loggedIn") != null && (Boolean) req.getSession().getAttribute("loggedIn"));
-		List<MnoBill> rawBillList = null;
-		List<MnoBill> billList = new ArrayList<MnoBill>();
+		List<MnoBill> billList = null;
 		
 		try {
 			if (loggedIn) {
-				rawBillList = MnoBill.all();
-				for (MnoBill bill : rawBillList) {
-					if (bill.getGroupId().equals(req.getSession().getAttribute("groupId"))) {
-						billList.add(bill);
-					}
-				}
+				Map<String,String> filter = new HashMap<String,String>();
+				filter.put("groupId", (String) req.getSession().getAttribute("groupId"));
+				billList = MnoBill.all(filter);
 			}
 			
 			String url="/bills/index.jsp";
