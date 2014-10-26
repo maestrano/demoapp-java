@@ -28,8 +28,6 @@ public class Main {
         props.setProperty("api.id", "app-1");
 		props.setProperty("api.key", "gfcmbu8269wyi0hjazk4t7o1sndpvrqxl53e1");
 		props.setProperty("app.host", "http://java-demoapp.maestrano.io");
-		props.setProperty("sso.initPath", "/maestrano/auth/saml/init");
-		props.setProperty("sso.consumePath", "/maestrano/auth/saml/consume");
 		Maestrano.configure(props);
 		
         //The port that we should run on can be set into an environment variable
