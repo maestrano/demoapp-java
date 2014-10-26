@@ -12,31 +12,43 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.maestrano.Maestrano;
 import com.maestrano.account.MnoBill;
+import com.maestrano.sso.MnoSession;
 
 public class BillsServlet extends HttpServlet {
-private static final long serialVersionUID = 1L;
-	
+	private static final long serialVersionUID = 1L;
+
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		Boolean loggedIn = (req.getSession().getAttribute("loggedIn") != null && (Boolean) req.getSession().getAttribute("loggedIn"));
 		List<MnoBill> billList = null;
-		
+
 		try {
 			if (loggedIn) {
+				// Example of Single Logout guarding
+				// Check the user session is still valid
+				MnoSession mnoSession = new MnoSession(req.getSession());
+				if (!mnoSession.isValid()) {
+				  resp.sendRedirect(Maestrano.ssoService().getInitUrl());
+				  return;
+				}
+				
+				
+				// Fetch the bills related to the user group
 				Map<String,String> filter = new HashMap<String,String>();
 				filter.put("groupId", (String) req.getSession().getAttribute("groupId"));
 				billList = MnoBill.all(filter);
 			}
-			
-			String url="/bills/index.jsp";
-		    ServletContext sc = getServletContext();
-		    RequestDispatcher rd = sc.getRequestDispatcher(url);
 
-		    req.setAttribute("billList", billList );
-		    rd.forward(req, resp);
-		
+			String url="/bills/index.jsp";
+			ServletContext sc = getServletContext();
+			RequestDispatcher rd = sc.getRequestDispatcher(url);
+
+			req.setAttribute("billList", billList );
+			rd.forward(req, resp);
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

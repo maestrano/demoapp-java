@@ -40,6 +40,7 @@
 					You need to be logged in to see your Maestrano bills
 				</p>
 				<% } else { %>
+				<p>Below are the bills related to the group: <%= sess.getAttribute("groupName") %></p>
 				<table class="table table-striped">
 					<thead>
 						<tr>
