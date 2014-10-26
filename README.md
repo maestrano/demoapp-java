@@ -1,4 +1,4 @@
-# Embedded Jetty template application
+# Maestrano Java DemoApp
 
 This is a template for a web application that uses embedded Jetty. The sample code consists of a JSP (this page) and a simple servlet.
 
