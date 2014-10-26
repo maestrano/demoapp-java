@@ -6,13 +6,33 @@
     <name>helloworld</name>
     <artifactId>helloworld</artifactId>
     <packaging>jar</packaging>
-
+    
+    <repository>
+        <id>project.local</id>
+        <name>project</name>
+        <url>file:${project.basedir}/repo</url>
+    </repository>
+    
     <properties>
         <java.version>1.6</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
     <dependencies>
+        <!-- Maestrano API -->
+        <dependency>
+            <groupId>com.maestrano</groupId>
+            <artifactId>maestrano-java</artifactId>
+            <version>0.1.0</version>
+        </dependency>
+        
+        <!-- Google GSON -->
+        <dependency>
+    			<groupId>com.google.code.gson</groupId>
+    			<artifactId>gson</artifactId>
+    			<version>2.2.4</version>
+    		</dependency>
+        
         <!-- Servlet API -->
         <dependency>
             <groupId>javax.servlet</groupId>
