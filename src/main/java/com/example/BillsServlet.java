@@ -17,6 +17,7 @@ import com.maestrano.account.MnoBill;
 public class BillsServlet extends HttpServlet {
 private static final long serialVersionUID = 1L;
 	
+
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		Boolean loggedIn = (req.getSession().getAttribute("loggedIn") != null && (Boolean) req.getSession().getAttribute("loggedIn"));
