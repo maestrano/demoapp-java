@@ -42,9 +42,5 @@ private static final long serialVersionUID = 1L;
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
-		// Dummy logout controller
-		req.getSession().invalidate();
-		resp.sendRedirect("/");
 	}
 }
