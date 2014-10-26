@@ -1,4 +1,4 @@
-
+<% HttpSession sess = request.getSession(); %>
 
 <!doctype html>
 
@@ -23,10 +23,10 @@
   <div class="container">
     <div class="row">
       <div class="span8 offset2" style="text-align:center;">
-        <% if ((Boolean) request.getSession().getAttribute("loggedIn")) { %>
-          <h4>Hello, <%= request.getSession().getAttribute("name") %> <%= request.getSession().getAttribute("surname") %></h4>
+        <% if (sess.getAttribute("loggedIn") != null && (Boolean) sess.getAttribute("loggedIn")) { %>
+          <h4>Hello, <%= sess.getAttribute("name") %> <%= sess.getAttribute("surname") %></h4>
           <br/>
-          <p>You logged in via group <%= request.getSession().getAttribute("groupName") %></p>
+          <p>You logged in via group <%= sess.getAttribute("groupName") %></p>
         <% } else { %>
           <a class="btn btn-large" href="/maestrano/auth/saml/init">Login</a>
         <% } %>
