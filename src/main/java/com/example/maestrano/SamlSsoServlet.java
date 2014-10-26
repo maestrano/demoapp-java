@@ -52,6 +52,7 @@ public class SamlSsoServlet extends HttpServlet {
 				sess.setAttribute("name", mnoUser.getFirstName());
 				sess.setAttribute("surname", mnoUser.getLastName());
 				sess.setAttribute("groupName", mnoGroup.getName());
+				sess.setAttribute("groupId", mnoGroup.getUid());
 
 				// Set Maestrano session (used for Single Logout)
 				MnoSession mnoSession = new MnoSession(req.getSession(),mnoUser);

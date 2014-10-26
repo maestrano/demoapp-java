@@ -22,7 +22,6 @@
 			<a class="brand" href="/">DemoApp</a>
 			<ul class="nav">
 				<li><a href="/">Home</a></li>
-				
 				<% if (loggedIn) { %>
 					<li><a href="/bills">Bills</a></li>
 					<li><a href="/logout">Logout</a></li>
@@ -34,19 +33,33 @@
 	<div class="container" style="margin-top: 60px;">
 		<div class="row">
 			<div class="span8 offset2" style="text-align: center;">
-				<% if (loggedIn) { %>
-				<h4>
-					Hello
-					<%= sess.getAttribute("name") %>
-					<%= sess.getAttribute("surname") %>
-				</h4>
-				<br />
-				<p>
-					You logged in via group <b><%= sess.getAttribute("groupName") %></b>
+				<% if (!loggedIn) { %>
+				<p class="text-error">
+					You need to be logged in to see your Maestrano bills
 				</p>
 				<% } else { %>
-				<a class="btn btn-large"
-					href="<%= Maestrano.ssoService().getInitPath() %>">Login</a>
+				<table class="table table-striped">
+					<thead>
+						<tr>
+							<th>UID</th>
+							<th>Description</th>
+							<th>Price (cents)</th>
+							<th>Currency</th>
+							<th>Created At</th>
+						</tr>
+					</thead>
+					<tbody>
+						<% for (MnoBill bill : request.getAttribute("billList")) %>
+						<tr>
+							<td><%= bill.getId() %></td>
+							<td><%= bill.getDescription() %></td>
+							<td><%= bill.getPriceCents() %></td>
+							<td><%= bill.getCurrency() %></td>
+							<td><%= bill.getCreatedAt() %></td>
+						</tr>
+						<% } %>
+					</tbody>
+				</table>
 				<% } %>
 			</div>
 		</div>

@@ -18,6 +18,16 @@
 		<servlet-class>com.example.LogoutServlet</servlet-class>
 	</servlet>
 	
+	<servlet>
+		<servlet-name>Bills</servlet-name>
+		<servlet-class>com.example.BillsServlet</servlet-class>
+	</servlet>
+	
+	<servlet-mapping>
+		<servlet-name>Bills</servlet-name>
+		<url-pattern>/bills</url-pattern>
+	</servlet-mapping>
+	
 	<servlet-mapping>
 		<servlet-name>App Logout</servlet-name>
 		<url-pattern>/logout</url-pattern>
