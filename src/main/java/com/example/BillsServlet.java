@@ -32,7 +32,7 @@ private static final long serialVersionUID = 1L;
 				}
 			}
 			
-			String url="bills/index.jsp";
+			String url="/bills/index.jsp";
 		    ServletContext sc = getServletContext();
 		    RequestDispatcher rd = sc.getRequestDispatcher(url);
 
