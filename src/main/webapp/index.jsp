@@ -45,8 +45,9 @@
 					You logged in via group <b><%= sess.getAttribute("groupName") %></b>
 				</p>
 				<% } else { %>
-				<a class="btn btn-large"
-					href="<%= Maestrano.ssoService().getInitPath() %>">Login</a>
+				<a class="btn btn-large" href="<%= Maestrano.ssoService().getInitPath() %>">Login with default tenant</a>
+				<br/>
+				<a class="btn btn-large" href="<%= Maestrano.ssoService().getInitPath("other-tenant") %>">Login with other tenant</a>
 				<% } %>
 			</div>
 		</div>

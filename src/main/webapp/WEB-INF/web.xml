@@ -36,6 +36,7 @@
 	<servlet-mapping>
 		<servlet-name>Maestrano SSO</servlet-name>
 		<url-pattern>/maestrano/auth/saml/init</url-pattern>
+		<url-pattern>/maestrano/auth/saml/init/*</url-pattern>
 		<url-pattern>/maestrano/auth/saml/consume</url-pattern>
 	</servlet-mapping>
 
