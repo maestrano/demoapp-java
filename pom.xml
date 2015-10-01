@@ -6,7 +6,7 @@
 	<version>1.0-SNAPSHOT</version>
 	<name>demoapp-java</name>
 	<artifactId>demoapp-java</artifactId>
-	<packaging>war</packaging>
+	<packaging>jar</packaging>
 
 	<properties>
 		<java.version>1.6</java.version>
