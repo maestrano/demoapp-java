@@ -11,6 +11,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.maestrano.Maestrano;
+import com.maestrano.exception.MnoConfigurationException;
+import com.maestrano.exception.MnoException;
 import com.maestrano.saml.AuthRequest;
 import com.maestrano.saml.Response;
 import com.maestrano.sso.MnoGroup;
@@ -32,8 +35,12 @@ public class SamlSsoServlet extends HttpServlet {
         if (matcher.find()) {
             preset = matcher.group(1);
         }
-
-        AuthRequest authReq = new AuthRequest(preset, req);
+        AuthRequest authReq;
+		try {
+			authReq = new AuthRequest(Maestrano.get(preset), req);
+		} catch (MnoException e) {
+			throw new ServletException("Maestrano was not well configured", e);
+		}
         try {
             String ssoUrl = authReq.getRedirectUrl();
             resp.sendRedirect(ssoUrl);

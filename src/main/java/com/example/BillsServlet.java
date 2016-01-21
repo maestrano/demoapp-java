@@ -22,7 +22,7 @@ public class BillsServlet extends HttpServlet {
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		Boolean loggedIn = (req.getSession().getAttribute("loggedIn") != null && (Boolean) req.getSession().getAttribute("loggedIn"));
+		boolean loggedIn = (req.getSession().getAttribute("loggedIn") != null && (Boolean) req.getSession().getAttribute("loggedIn"));
 		List<MnoBill> billList = null;
 
 		try {
@@ -31,7 +31,7 @@ public class BillsServlet extends HttpServlet {
 				// Check the user session is still valid
 				MnoSession mnoSession = new MnoSession(req.getSession());
 				if (!mnoSession.isValid()) {
-				  resp.sendRedirect(Maestrano.ssoService().getInitUrl());
+				  resp.sendRedirect(Maestrano.getDefault().ssoService().getInitUrl());
 				  return;
 				}
 				
@@ -39,7 +39,7 @@ public class BillsServlet extends HttpServlet {
 				// Fetch the bills related to the user group
 				Map<String,String> filter = new HashMap<String,String>();
 				filter.put("groupId", (String) req.getSession().getAttribute("groupId"));
-				billList = MnoBill.all(filter);
+				billList = MnoBill.client().all(filter);
 			}
 
 			String url="/bills/index.jsp";
