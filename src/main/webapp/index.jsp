@@ -37,7 +37,7 @@ body>
 					}
 				%>
 			<li><a href="https://github.com/maestrano/demoapp-java">GitHub</a></li>
-			<li><a href="http://xade.eu">Using Maestrano v<%=sess.getAttribute("name")%></a></li>
+			<li><a href="https://github.com/maestrano/maestrano-java">Using Maestrano v<%=Maestrano.getVersion()%></a></li>
 		</ul>
 	</div>
 
