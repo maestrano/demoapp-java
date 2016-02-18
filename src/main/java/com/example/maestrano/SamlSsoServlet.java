@@ -18,84 +18,84 @@ import com.maestrano.sso.MnoSession;
 import com.maestrano.sso.MnoUser;
 
 public class SamlSsoServlet extends HttpServlet {
-    private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
-    private Pattern regExTenantPattern = Pattern.compile("/maestrano/auth/saml/init/([a-zA-Z0-9\\-]*)");
+	private Pattern regExTenantPattern = Pattern.compile("/maestrano/auth/saml/init/([a-zA-Z0-9\\-]*)");
 
-    // GET /maestrano/auth/saml/init
-    // GET /maestrano/auth/saml/init/other-tenant
-    @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        // Check for ID case first, since the All pattern would also match
-        String preset = "default";
-        Matcher matcher = regExTenantPattern.matcher(req.getRequestURI());
-        if (matcher.find()) {
-            preset = matcher.group(1);
-        }
+	// GET /maestrano/auth/saml/init
+	// GET /maestrano/auth/saml/init/other-tenant
+	@Override
+	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		// Check for ID case first, since the All pattern would also match
+		String preset = "default";
+		Matcher matcher = regExTenantPattern.matcher(req.getRequestURI());
+		if (matcher.find()) {
+			preset = matcher.group(1);
+		}
 
-        AuthRequest authReq = new AuthRequest(preset, req);
-        try {
-            String ssoUrl = authReq.getRedirectUrl();
-            resp.sendRedirect(ssoUrl);
+		AuthRequest authReq = new AuthRequest(preset, req);
+		try {
+			String ssoUrl = authReq.getRedirectUrl();
+			resp.sendRedirect(ssoUrl);
 
-        } catch (Exception e) {
-            ServletOutputStream out = resp.getOutputStream();
-            e.printStackTrace();
-            out.write(e.getMessage().getBytes());
-            out.flush();
-            out.close();
-        }
-    }
+		} catch (Exception e) {
+			ServletOutputStream out = resp.getOutputStream();
+			e.printStackTrace();
+			out.write(e.getMessage().getBytes());
+			out.flush();
+			out.close();
+		}
+	}
 
-    @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        Response authResp = null;
-        try {
-            authResp = new Response();
-            authResp.loadXmlFromBase64(req.getParameter("SAMLResponse"));
+	@Override
+	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		Response authResp = null;
+		try {
+			authResp = new Response();
+			authResp.loadXmlFromBase64(req.getParameter("SAMLResponse"));
 
-            if (authResp.isValid()) {
+			if (authResp.isValid()) {
 
-                // Build maestrano user and group objects
-                MnoUser mnoUser = new MnoUser(authResp);
-                MnoGroup mnoGroup = new MnoGroup(authResp);
+				// Build maestrano user and group objects
+				MnoUser mnoUser = new MnoUser(authResp);
+				MnoGroup mnoGroup = new MnoGroup(authResp);
 
-                // No database model in this project. We just keep the
-                // relevant details in session
-                HttpSession sess = req.getSession();
-                sess.setAttribute("loggedIn", true);
-                sess.setAttribute("name", mnoUser.getFirstName());
-                sess.setAttribute("surname", mnoUser.getLastName());
-                sess.setAttribute("groupName", mnoGroup.getName());
-                sess.setAttribute("groupId", mnoGroup.getUid());
+				// No database model in this project. We just keep the
+				// relevant details in session
+				HttpSession sess = req.getSession();
+				sess.setAttribute("loggedIn", true);
+				sess.setAttribute("name", mnoUser.getFirstName());
+				sess.setAttribute("surname", mnoUser.getLastName());
+				sess.setAttribute("groupName", mnoGroup.getName());
+				sess.setAttribute("groupId", mnoGroup.getUid());
 
-                // Set Maestrano session (used for Single Logout)
-                MnoSession mnoSession = new MnoSession(req.getSession(), mnoUser);
-                mnoSession.save();
+				// Set Maestrano session (used for Single Logout)
+				MnoSession mnoSession = new MnoSession(req.getSession(), mnoUser);
+				mnoSession.save();
 
-                // Redirect to you application home page
-                resp.sendRedirect("/");
+				// Redirect to you application home page
+				resp.sendRedirect("/");
 
-            } else {
-                ServletOutputStream out = resp.getOutputStream();
-                out.write("SAML Response is invalid".getBytes());
-                out.flush();
-                out.close();
-            }
+			} else {
+				ServletOutputStream out = resp.getOutputStream();
+				out.write("SAML Response is invalid".getBytes());
+				out.flush();
+				out.close();
+			}
 
-        } catch (Exception e) {
-            ServletOutputStream out = resp.getOutputStream();
-            e.printStackTrace();
-            out.write(e.getMessage().getBytes());
-            out.flush();
-            out.close();
-        }
+		} catch (Exception e) {
+			ServletOutputStream out = resp.getOutputStream();
+			e.printStackTrace();
+			out.write(e.getMessage().getBytes());
+			out.flush();
+			out.close();
+		}
 
-        ServletOutputStream out = resp.getOutputStream();
+		ServletOutputStream out = resp.getOutputStream();
 
-        out.write("Hello Servlet!".getBytes());
-        out.flush();
-        out.close();
-    }
+		out.write("Hello Servlet!".getBytes());
+		out.flush();
+		out.close();
+	}
 
 }
