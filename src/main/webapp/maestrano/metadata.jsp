@@ -6,7 +6,7 @@
 	java.io.PrintWriter writer = response.getWriter();
 
 	if (Maestrano.authenticate(request)) {
-		writer.write(Maestrano.toMetadata());
+		writer.write(Maestrano.getDefault().toMetadata());
 	} else {
 		writer.write("Failed");
 	}
