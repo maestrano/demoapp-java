@@ -15,18 +15,32 @@ import com.maestrano.Maestrano;
  */
 public class Main {
 
-    /**
+    private static final String DEFAULT_PORT = "8080";
+
+	/**
      * @param args
      */
     public static void main(String[] args) throws Exception {
         String webappDirLocation = "src/main/webapp/";
 
+        // The port that we should run on can be set into an environment variable
+        // Look for that variable and default to 8080 if it isn't there.
+        String webPort = System.getenv("PORT");
+        if (webPort == null || webPort.isEmpty()) {
+        	System.out.println("No PORT env was given, will use port:" + DEFAULT_PORT);
+            webPort = DEFAULT_PORT;
+        }
+        String appHost = System.getenv("APP_HOST");
+        if (appHost == null || appHost.isEmpty()) {
+        	appHost = "http://localhost:" + webPort;
+        	System.out.println("No APP_HOST environment variable was given, will use: " + appHost);
+        }
         // Configure Maestrano API
         Properties props = new Properties();
 
         // Environment configuration (Maestrano UAT environment)
         props.setProperty("app.environment", "test");
-        props.setProperty("app.host", "http://localhost:8080");
+        props.setProperty("app.host", appHost);
 //        props.setProperty("api.connecHost", "http://api-connec.uat.maestrano.io");
 //        props.setProperty("api.accountHost", "https://uat.maestrano.io");
 //        props.setProperty("sso.idp", "https://uat.maestrano.io");
@@ -48,7 +62,7 @@ public class Main {
         // For multi-tenant sintegration, define different presets
         Properties otherProps = new Properties();
         otherProps.setProperty("app.environment", "test");
-        otherProps.setProperty("app.host", "http://localhost:8080");
+        otherProps.setProperty("app.host", appHost);
 //        otherProps.setProperty("api.connecHost", "http://api-connec.uat.maestrano.io");
 //        otherProps.setProperty("api.accountHost", "https://uat.maestrano.io");
 //        otherProps.setProperty("sso.idp", "https://uat.maestrano.io");
@@ -64,12 +78,7 @@ public class Main {
 
         Maestrano.configure("other-tenant", otherProps);
 
-        // The port that we should run on can be set into an environment variable
-        // Look for that variable and default to 8080 if it isn't there.
-        String webPort = System.getenv("PORT");
-        if (webPort == null || webPort.isEmpty()) {
-            webPort = "8080";
-        }
+
 
         Server server = new Server(Integer.valueOf(webPort));
         WebAppContext root = new WebAppContext();
