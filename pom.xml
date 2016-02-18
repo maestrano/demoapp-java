@@ -18,7 +18,7 @@
 		<dependency>
 			<groupId>com.maestrano</groupId>
 			<artifactId>maestrano-java</artifactId>
-			<version>1.0.0</version>
+			<version>0.9.1</version>
 		</dependency>
 
 		<!-- Google GSON -->
