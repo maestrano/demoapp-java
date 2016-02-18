@@ -12,8 +12,8 @@ First build with:
 
 Then run it with (application uses embedded jetty):
 
-    $java -jar target/demoapp-java-1.0-SNAPSHOT-jar-with-dependencies.jar
-
+    $java -cp target/classes:target/dependency/* com.example.Main
+    
 If you need to use a special port
 
-    $DEMO_PORT=1234 java -jar target/demoapp-java-1.0-SNAPSHOT-jar-with-dependencies.jar
+    $DEMO_PORT=1234 java -cp target/classes:target/dependency/* com.example.Main
