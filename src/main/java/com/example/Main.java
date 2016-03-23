@@ -31,7 +31,7 @@ public class Main {
 		Properties props = new Properties();
 
 		// Environment configuration (Maestrano UAT environment)
-		props.setProperty("app.environment", "test");
+		props.setProperty("environment", "test");
 		props.setProperty("app.host", appHost);
 		// Authentication
 		props.setProperty("api.id", "app-1");
