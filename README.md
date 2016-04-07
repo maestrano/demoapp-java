@@ -16,4 +16,4 @@ Then run it with (application uses embedded jetty):
     
 If you need to use a special port
 
-    $DEMO_PORT=1234 java -cp target/classes:target/dependency/* com.example.Main
+    $PORT=1234 java -cp target/classes:target/dependency/* com.example.Main
