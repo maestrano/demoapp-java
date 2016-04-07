@@ -16,7 +16,7 @@ public class Main {
 
 	public static void main(String[] args) throws Exception {
 		String webappDirLocation = "src/main/webapp/";
-		String webPort = System.getenv("DEMO_PORT");
+		String webPort = System.getenv("PORT");
 		if (webPort == null || webPort.isEmpty()) {
 			webPort = "8080";
 		}
