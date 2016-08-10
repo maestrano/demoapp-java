@@ -1,44 +1,8 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xmlns="http://java.sun.com/xml/ns/javaee" xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
-	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
-	version="2.5">
-
+<web-app xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
+	version="3.0">
+	<display-name>Spring MVC Application</display-name>
 	<welcome-file-list>
 		<welcome-file>index.jsp</welcome-file>
 	</welcome-file-list>
-
-	<servlet>
-		<servlet-name>Maestrano SSO</servlet-name>
-		<servlet-class>com.example.maestrano.SamlSsoServlet</servlet-class>
-	</servlet>
-	
-	<servlet>
-		<servlet-name>App Logout</servlet-name>
-		<servlet-class>com.example.LogoutServlet</servlet-class>
-	</servlet>
-	
-	<servlet>
-		<servlet-name>Bills</servlet-name>
-		<servlet-class>com.example.BillsServlet</servlet-class>
-	</servlet>
-	
-	<servlet-mapping>
-		<servlet-name>Bills</servlet-name>
-		<url-pattern>/bills</url-pattern>
-	</servlet-mapping>
-	
-	<servlet-mapping>
-		<servlet-name>App Logout</servlet-name>
-		<url-pattern>/logout</url-pattern>
-	</servlet-mapping>
-
-	<servlet-mapping>
-		<servlet-name>Maestrano SSO</servlet-name>
-		<url-pattern>/maestrano/auth/saml/init</url-pattern>
-		<url-pattern>/maestrano/auth/saml/init/*</url-pattern>
-		<url-pattern>/maestrano/auth/saml/consume</url-pattern>
-	</servlet-mapping>
-
-
 </web-app>

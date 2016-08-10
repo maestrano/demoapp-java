@@ -7,13 +7,22 @@ http://java-demoapp.maestrano.io
 ## Running the application locally
 
 First build with:
+```
+mvn package
+```
+Then run it with (application uses embedded tomcat):
 
-    $mvn clean install
+Linux
+```
+sh target/bin/webapp
+```
+Windows
+```
+target/bin/webapp.bat
+```
 
-Then run it with (application uses embedded jetty):
-
-    $java -cp target/classes:target/dependency/* com.example.Main
-    
 If you need to use a special port
+```
+PORT=1238 sh target/bin/webapp
 
-    $PORT=1234 java -cp target/classes:target/dependency/* com.example.Main
+```
