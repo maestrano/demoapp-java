@@ -33,7 +33,13 @@ public class BuildInformationHelper {
 	 * @return A {@code String} with the Git SHA-1.
 	 */
 	public static String getGitSha1() {
-		return properties.getProperty("git-sha-1");
+		String gitSha = properties.getProperty("git-sha-1");
+		// The Heroku slug compiler deletes the .git directory from the working copy before the build process starts. 
+		if ("${buildNumber}".equals(gitSha)) {
+			return System.getenv("SOURCE_VERSION");
+		} else {
+			return gitSha;
+		}
 	}
 
 	public static String getBuildTimestamp() {
