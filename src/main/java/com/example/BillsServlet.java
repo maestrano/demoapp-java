@@ -12,48 +12,48 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import com.maestrano.Maestrano;
 import com.maestrano.account.MnoBill;
+import com.maestrano.exception.MnoException;
 import com.maestrano.sso.MnoSession;
-
 
 @WebServlet("/bills")
 public class BillsServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-
+	private static final String REDIRECTION_UL = "/bills/index.jsp";
 
 	@Override
-	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		boolean loggedIn = (req.getSession().getAttribute("loggedIn") != null && (Boolean) req.getSession().getAttribute("loggedIn"));
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		HttpSession session = request.getSession();
+		boolean loggedIn = (session.getAttribute("loggedIn") != null && (Boolean) session.getAttribute("loggedIn"));
 		List<MnoBill> billList = null;
 
 		try {
 			if (loggedIn) {
 				// Example of Single Logout guarding
 				// Check the user session is still valid
-				MnoSession mnoSession = new MnoSession(req.getSession());
+				String marketplace = (String) session.getAttribute("marketplace");
+				MnoSession mnoSession = new MnoSession(marketplace, session);
 				if (!mnoSession.isValid()) {
-				  resp.sendRedirect(Maestrano.getDefault().ssoService().getInitUrl());
-				  return;
+					response.sendRedirect(Maestrano.get(marketplace).ssoService().getInitUrl());
+					return;
 				}
-				
-				
 				// Fetch the bills related to the user group
-				Map<String,String> filter = new HashMap<String,String>();
-				filter.put("groupId", (String) req.getSession().getAttribute("groupId"));
-				billList = MnoBill.client().all(filter);
+				Map<String, String> filter = new HashMap<String, String>();
+				filter.put("groupId", (String) session.getAttribute("groupId"));
+				billList = MnoBill.client(marketplace).all(filter);
 			}
 
-			String url="/bills/index.jsp";
-			ServletContext sc = getServletContext();
-			RequestDispatcher rd = sc.getRequestDispatcher(url);
-
-			req.setAttribute("billList", billList );
-			rd.forward(req, resp);
-
-		} catch (Exception e) {
+		} catch (MnoException e) {
 			e.printStackTrace();
 		}
+
+		ServletContext servletContext = getServletContext();
+		RequestDispatcher requestDispatcher = servletContext.getRequestDispatcher(REDIRECTION_UL);
+
+		request.setAttribute("billList", billList);
+		requestDispatcher.forward(request, response);
 	}
 }
