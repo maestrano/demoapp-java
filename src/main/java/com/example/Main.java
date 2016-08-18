@@ -18,6 +18,8 @@ import org.apache.catalina.startup.Tomcat;
 import org.apache.catalina.webresources.DirResourceSet;
 import org.apache.catalina.webresources.EmptyResourceSet;
 import org.apache.catalina.webresources.StandardRoot;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Strings;
 import com.maestrano.Maestrano;
@@ -32,7 +34,10 @@ import com.maestrano.exception.MnoConfigurationException;
  */
 public class Main {
 
+	private static final Logger logger = LoggerFactory.getLogger(Main.class);
+
 	public static void main(String[] args) throws IOException, ServletException, LifecycleException, MnoConfigurationException {
+
 		String webPort = System.getenv("PORT");
 		if (webPort == null || webPort.isEmpty()) {
 			webPort = "8080";
@@ -41,9 +46,9 @@ public class Main {
 		if (appHost == null || appHost.isEmpty()) {
 			appHost = "http://localhost:" + webPort;
 		}
-		log("WebPort: " + webPort);
-		log("AppHost: " + appHost);
-		log("Using Maestrano: " + Maestrano.getVersion());
+		logger.info("WebPort: " + webPort);
+		logger.info("AppHost: " + appHost);
+		logger.info("Using Maestrano: " + Maestrano.getVersion());
 		configureMaestrano(appHost);
 		startWebServer(webPort);
 	}
@@ -79,9 +84,9 @@ public class Main {
 			Properties developmentPlatformProperties = new Properties();
 			developmentPlatformProperties.setProperty("dev-platform.host", "https://dev-platform.maestrano.io/");
 			Map<String, Maestrano> marketplaces = Maestrano.autoConfigure(developmentPlatformProperties);
-			log("Marketplaces Configurations Found: " + marketplaces.keySet());
+			logger.info("Marketplaces Configurations Found: " + marketplaces.keySet());
 		} else {
-			log("Marketplace autoConfigure not activated. Environment variable not found: " + Arrays.toString(DEV_PLATFORM_ENVIRONMENT_VARIABLES));
+			logger.info("Marketplace autoConfigure not activated. Environment variable not found: " + Arrays.toString(DEV_PLATFORM_ENVIRONMENT_VARIABLES));
 		}
 
 	}
@@ -98,7 +103,7 @@ public class Main {
 		// Set execution independent of current thread context classloader (compatibility with exec:java mojo)
 		ctx.setParentClassLoader(Main.class.getClassLoader());
 
-		log("Configuring app with basedir: " + webContentFolder.getAbsolutePath());
+		logger.debug("Configuring app with basedir: " + webContentFolder.getAbsolutePath());
 
 		// Declare an alternative location for your "WEB-INF/classes" dir
 		// Servlet 3.0 annotation will work
@@ -108,7 +113,7 @@ public class Main {
 		WebResourceSet resourceSet;
 		if (additionWebInfClassesFolder.exists()) {
 			resourceSet = new DirResourceSet(resources, "/WEB-INF/classes", additionWebInfClassesFolder.getAbsolutePath(), "/");
-			log("Loading WEB-INF resources from as '" + additionWebInfClassesFolder.getAbsolutePath() + "'");
+			logger.debug("Loading WEB-INF resources from as '" + additionWebInfClassesFolder.getAbsolutePath() + "'");
 		} else {
 			resourceSet = new EmptyResourceSet(resources);
 		}
@@ -129,15 +134,11 @@ public class Main {
 			} else {
 				root = new File(runningJarPath.substring(0, lastIndexOf));
 			}
-			log("Application resolved root folder: " + root.getAbsolutePath());
+			logger.debug("Application resolved root folder: " + root.getAbsolutePath());
 			return root;
 		} catch (URISyntaxException ex) {
 			throw new RuntimeException(ex);
 		}
-	}
-
-	private static void log(String message) {
-		System.out.println("[MAESTRANO] " + message);
 	}
 
 	private static boolean hasEnvironments(String[] codes) {

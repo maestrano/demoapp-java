@@ -1,7 +1,6 @@
 package com.example.maestrano;
 
 import java.io.IOException;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import javax.servlet.ServletException;
@@ -11,9 +10,14 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.xml.stream.XMLStreamException;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.example.ServletHelper;
 import com.maestrano.Maestrano;
-import com.maestrano.exception.MnoException;
+import com.maestrano.exception.MnoConfigurationException;
 import com.maestrano.saml.AuthRequest;
 import com.maestrano.saml.Response;
 import com.maestrano.sso.MnoGroup;
@@ -22,6 +26,8 @@ import com.maestrano.sso.MnoUser;
 
 @WebServlet(urlPatterns = { "/maestrano/auth/saml/init", "/maestrano/auth/saml/init/*", "/maestrano/auth/saml/consume", "/maestrano/auth/saml/consume/*" })
 public class SamlSsoServlet extends HttpServlet {
+
+	private static final Logger logger = LoggerFactory.getLogger(SamlSsoServlet.class);
 	private static final long serialVersionUID = 1L;
 
 	private static final Pattern INIT_PATTERN = Pattern.compile("/maestrano/auth/saml/init/([a-zA-Z0-9\\-]*)");
@@ -33,32 +39,28 @@ public class SamlSsoServlet extends HttpServlet {
 	 * <li>GET/maestrano/auth/saml/init/[marketplace]</li>
 	 * <ul>
 	 * 
+	 * @throws IOException
+	 * 
 	 */
 	@Override
-	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// Check for ID case first, since the All pattern would also match
-		String marketplace = "default";
-		Matcher matcher = INIT_PATTERN.matcher(req.getRequestURI());
-		if (matcher.find()) {
-			marketplace = matcher.group(1);
-		}
-		AuthRequest authReq;
+		Maestrano maestrano;
 		try {
-			authReq = new AuthRequest(Maestrano.get(marketplace), req);
-		} catch (MnoException e) {
-			throw new ServletException("Maestrano was not well configured", e);
+			maestrano = ServletHelper.getConfiguration(INIT_PATTERN, request);
+		} catch (MnoConfigurationException e) {
+			ServletHelper.writeError(response, e);
+			return;
 		}
+		AuthRequest authReq = new AuthRequest(maestrano, request);
 		try {
 			String ssoUrl = authReq.getRedirectUrl();
-			resp.sendRedirect(ssoUrl);
-
-		} catch (Exception e) {
-			e.printStackTrace();
-			ServletOutputStream out = resp.getOutputStream();
-			out.write(e.getMessage().getBytes());
-			out.flush();
-			out.close();
+			response.sendRedirect(ssoUrl);
+		} catch (XMLStreamException e) {
+			logger.error("could not get redirect URL", e);
+			ServletHelper.writeError(response, e);
 		}
+
 	}
 
 	/**
@@ -71,15 +73,16 @@ public class SamlSsoServlet extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		try {
-			String marketplace = "default";
-			Matcher matcher = CONSUME_PATTERN.matcher(request.getRequestURI());
-			if (matcher.find()) {
-				marketplace = matcher.group(1);
+			Maestrano maestrano;
+			try {
+				maestrano = ServletHelper.getConfiguration(CONSUME_PATTERN, request);
+			} catch (MnoConfigurationException e) {
+				ServletHelper.writeError(response, e);
+				return;
 			}
-
-			Response authResp = new Response();
-			authResp.loadXmlFromBase64(request.getParameter("SAMLResponse"));
-
+			String samlResponse = request.getParameter("SAMLResponse");
+			Response authResp = Response.loadFromBase64XML(maestrano.ssoService(), samlResponse);
+			logger.trace("/maestrano/auth/saml/consume received: " + authResp);
 			if (authResp.isValid()) {
 
 				// Build maestrano user and group objects
@@ -93,7 +96,7 @@ public class SamlSsoServlet extends HttpServlet {
 				sess.setAttribute("surname", mnoUser.getLastName());
 				sess.setAttribute("groupName", mnoGroup.getName());
 				sess.setAttribute("groupId", mnoGroup.getUid());
-				sess.setAttribute("marketplace", marketplace);
+				sess.setAttribute("marketplace", maestrano.getPreset());
 				// Set Maestrano session (used for Single Logout)
 				MnoSession mnoSession = new MnoSession(request.getSession(), mnoUser);
 				mnoSession.save();
@@ -109,11 +112,8 @@ public class SamlSsoServlet extends HttpServlet {
 			}
 
 		} catch (Exception e) {
-			ServletOutputStream out = response.getOutputStream();
-			e.printStackTrace();
-			out.write(e.getMessage().getBytes());
-			out.flush();
-			out.close();
+			logger.error("Could not process /maestrano/auth/saml/consume", e);
+			ServletHelper.writeError(response, e);
 		}
 	}
 

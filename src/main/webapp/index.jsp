@@ -1,4 +1,5 @@
 <%@ page import="com.maestrano.Maestrano"%>
+<%@ page import="java.util.Map"%>
 <%
 	HttpSession sess = request.getSession();
 %>
@@ -49,11 +50,14 @@
 				<p>
 					You logged in via group <b><%=sess.getAttribute("groupName")%></b>
 				</p>
+				<p>
+					On the marketplace: <b><%=sess.getAttribute("marketplace")%></b>
+				</p>
 				<%
 					} else {
-						for (String preset : Maestrano.presets()) {
+						for (Map.Entry<String, Maestrano> entry : Maestrano.getConfigurations().entrySet()) {
 				%>
-				<a class="btn btn-large" href="<%=Maestrano.get(preset).ssoService().getInitPath()%>">Tenant: <%=preset%></a>
+				<a class="btn btn-large" href="<%=entry.getValue().ssoService().getInitPath()%>">Tenant: <%=entry.getKey()%></a>
 				<%
 					}
 					}

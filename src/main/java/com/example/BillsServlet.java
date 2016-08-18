@@ -14,6 +14,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.maestrano.Maestrano;
 import com.maestrano.account.MnoBill;
 import com.maestrano.exception.MnoException;
@@ -21,6 +24,8 @@ import com.maestrano.sso.MnoSession;
 
 @WebServlet("/bills")
 public class BillsServlet extends HttpServlet {
+
+	private static final Logger logger = LoggerFactory.getLogger(BillsServlet.class);
 	private static final long serialVersionUID = 1L;
 	private static final String REDIRECTION_UL = "/bills/index.jsp";
 
@@ -30,11 +35,11 @@ public class BillsServlet extends HttpServlet {
 		boolean loggedIn = (session.getAttribute("loggedIn") != null && (Boolean) session.getAttribute("loggedIn"));
 		List<MnoBill> billList = null;
 
-		try {
-			if (loggedIn) {
-				// Example of Single Logout guarding
-				// Check the user session is still valid
-				String marketplace = (String) session.getAttribute("marketplace");
+		if (loggedIn) {
+			// Example of Single Logout guarding
+			// Check the user session is still valid
+			String marketplace = (String) session.getAttribute("marketplace");
+			try {
 				MnoSession mnoSession = new MnoSession(marketplace, session);
 				if (!mnoSession.isValid()) {
 					response.sendRedirect(Maestrano.get(marketplace).ssoService().getInitUrl());
@@ -44,10 +49,10 @@ public class BillsServlet extends HttpServlet {
 				Map<String, String> filter = new HashMap<String, String>();
 				filter.put("groupId", (String) session.getAttribute("groupId"));
 				billList = MnoBill.client(marketplace).all(filter);
-			}
 
-		} catch (MnoException e) {
-			e.printStackTrace();
+			} catch (MnoException e) {
+				logger.error("Could not retrieve bill", e);
+			}
 		}
 
 		ServletContext servletContext = getServletContext();
