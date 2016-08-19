@@ -26,3 +26,13 @@ If you need to use a special port
 PORT=1238 sh target/bin/webapp
 
 ```
+
+If you want to activate marketplace autodiscovery
+```
+export ENVIRONMENT_NAME=<your environment name>
+export ENVIRONMENT_KEY=<your environment key>
+export ENVIRONMENT_SECRET=<your environment name>
+export PORT=1238
+sh target/bin/webapp
+
+```
