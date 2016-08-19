@@ -1,10 +1,16 @@
 package com.example;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
+import java.util.Arrays;
+import java.util.Map;
 import java.util.Properties;
 
+import javax.servlet.ServletException;
+
+import org.apache.catalina.LifecycleException;
 import org.apache.catalina.WebResourceRoot;
 import org.apache.catalina.WebResourceSet;
 import org.apache.catalina.core.StandardContext;
@@ -12,30 +18,80 @@ import org.apache.catalina.startup.Tomcat;
 import org.apache.catalina.webresources.DirResourceSet;
 import org.apache.catalina.webresources.EmptyResourceSet;
 import org.apache.catalina.webresources.StandardRoot;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import com.google.common.base.Strings;
 import com.maestrano.Maestrano;
 import com.maestrano.exception.MnoConfigurationException;
 
 /**
  * 
- * This class launches the web application in an embedded Jetty container. This is the entry point to your application. The Java command that is used for launching should fire this main method.
+ * This class launches the web application in an embedded Tomcat container.
+ * 
+ * This is the entry point to your application. The Java command that is used for launching should fire this main method.
  * 
  */
 public class Main {
 
-	public static void main(String[] args) throws Exception {
+	private static final Logger logger = LoggerFactory.getLogger(Main.class);
+
+	public static void main(String[] args) throws IOException, ServletException, LifecycleException, MnoConfigurationException {
+
 		String webPort = System.getenv("PORT");
 		if (webPort == null || webPort.isEmpty()) {
 			webPort = "8080";
 		}
-		System.out.println("webPort: " + webPort);
 		String appHost = System.getenv("DEMO_APP_HOST");
 		if (appHost == null || appHost.isEmpty()) {
 			appHost = "http://localhost:" + webPort;
 		}
-		System.out.println("appHost: " + appHost);
-		System.out.println("Using Maestrano: " + Maestrano.getVersion());
+		logger.info("WebPort: " + webPort);
+		logger.info("AppHost: " + appHost);
+		logger.info("Using Maestrano: " + Maestrano.getVersion());
 		configureMaestrano(appHost);
+		startWebServer(webPort);
+	}
+
+	private static final String[] DEV_PLATFORM_ENVIRONMENT_VARIABLES = { "ENVIRONMENT_NAME", "ENVIRONMENT_KEY", "ENVIRONMENT_SECRET" };
+
+	private static void configureMaestrano(String appHost) throws MnoConfigurationException {
+		// Configure Maestrano API Using properties files
+		Properties properties = new Properties();
+
+		// Environment configuration (Maestrano UAT environment)
+		properties.setProperty("environment", "test");
+		properties.setProperty("app.host", appHost);
+		// Authentication
+		properties.setProperty("api.id", "app-1");
+		properties.setProperty("api.key", "gfcmbu8269wyi0hjazk4t7o1sndpvrqxl53e1");
+		// Add Connec! webhook notification path for your application
+		// Subscribe to certain entities (to receive updates from Connec!)
+		// These settings will automatically appear in your Metadata endpoint
+		// (see maestrano-java README)
+		properties.setProperty("webhook.connec.notificationsPath", "/maestrano/connec/notifications");
+		properties.setProperty("webhook.connec.subscriptions.company", "true");
+		properties.setProperty("webhook.connec.subscriptions.organizations", "true");
+		properties.setProperty("webhook.connec.subscriptions.people", "true");
+		// Configure maestrano for the default preset
+		Maestrano.configure(properties);
+
+		// For multi-tenant sintegration, define different presets using a properties file
+		Maestrano.configure("other-tenant", "other-tenant-config.properties");
+
+		if (hasEnvironments(DEV_PLATFORM_ENVIRONMENT_VARIABLES)) {
+			// AutoConfigure Maestrano API Using Development platform
+			Properties developmentPlatformProperties = new Properties();
+			developmentPlatformProperties.setProperty("dev-platform.host", "https://dev-platform.maestrano.io/");
+			Map<String, Maestrano> marketplaces = Maestrano.autoConfigure(developmentPlatformProperties);
+			logger.info("Marketplaces Configurations Found: " + marketplaces.keySet());
+		} else {
+			logger.info("Marketplace autoConfigure not activated. Environment variable not found: " + Arrays.toString(DEV_PLATFORM_ENVIRONMENT_VARIABLES));
+		}
+
+	}
+
+	private static void startWebServer(String webPort) throws IOException, ServletException, LifecycleException {
 		Tomcat tomcat = new Tomcat();
 		tomcat.setPort(Integer.valueOf(webPort));
 		File root = getRootFolder();
@@ -47,7 +103,7 @@ public class Main {
 		// Set execution independent of current thread context classloader (compatibility with exec:java mojo)
 		ctx.setParentClassLoader(Main.class.getClassLoader());
 
-		System.out.println("configuring app with basedir: " + webContentFolder.getAbsolutePath());
+		logger.debug("Configuring app with basedir: " + webContentFolder.getAbsolutePath());
 
 		// Declare an alternative location for your "WEB-INF/classes" dir
 		// Servlet 3.0 annotation will work
@@ -57,7 +113,7 @@ public class Main {
 		WebResourceSet resourceSet;
 		if (additionWebInfClassesFolder.exists()) {
 			resourceSet = new DirResourceSet(resources, "/WEB-INF/classes", additionWebInfClassesFolder.getAbsolutePath(), "/");
-			System.out.println("loading WEB-INF resources from as '" + additionWebInfClassesFolder.getAbsolutePath() + "'");
+			logger.debug("Loading WEB-INF resources from as '" + additionWebInfClassesFolder.getAbsolutePath() + "'");
 		} else {
 			resourceSet = new EmptyResourceSet(resources);
 		}
@@ -66,31 +122,6 @@ public class Main {
 
 		tomcat.start();
 		tomcat.getServer().await();
-	}
-
-	private static void configureMaestrano(String appHost) throws MnoConfigurationException {
-		// Configure Maestrano API
-		Properties props = new Properties();
-
-		// Environment configuration (Maestrano UAT environment)
-		props.setProperty("environment", "test");
-		props.setProperty("app.host", appHost);
-		// Authentication
-		props.setProperty("api.id", "app-1");
-		props.setProperty("api.key", "gfcmbu8269wyi0hjazk4t7o1sndpvrqxl53e1");
-		// Add Connec! webhook notification path for your application
-		// Subscribe to certain entities (to receive updates from Connec!)
-		// These settings will automatically appear in your Metadata endpoint
-		// (see maestrano-java README)
-		props.setProperty("webhook.connec.notificationsPath", "/maestrano/connec/notifications");
-		props.setProperty("webhook.connec.subscriptions.company", "true");
-		props.setProperty("webhook.connec.subscriptions.organizations", "true");
-		props.setProperty("webhook.connec.subscriptions.people", "true");
-		// Configure maestrano for the default preset
-		Maestrano.configure(props);
-
-		// For multi-tenant sintegration, define different presets using a properties file
-		Maestrano.configure("other-tenant", "other-tenant-config.properties");
 	}
 
 	private static File getRootFolder() {
@@ -103,10 +134,19 @@ public class Main {
 			} else {
 				root = new File(runningJarPath.substring(0, lastIndexOf));
 			}
-			System.out.println("application resolved root folder: " + root.getAbsolutePath());
+			logger.debug("Application resolved root folder: " + root.getAbsolutePath());
 			return root;
 		} catch (URISyntaxException ex) {
 			throw new RuntimeException(ex);
 		}
+	}
+
+	private static boolean hasEnvironments(String[] codes) {
+		for (String code : codes) {
+			if (Strings.isNullOrEmpty(System.getenv(code))) {
+				return false;
+			}
+		}
+		return true;
 	}
 }
