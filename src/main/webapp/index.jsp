@@ -37,7 +37,7 @@
 	</div>
 	<div class="container" style="margin-top: 60px;">
 		<div class="row">
-			<div class="span8 offset2" style="text-align: center;">
+			<div class="span8 offset2"">
 				<%
 					if (loggedIn) {
 				%>
@@ -55,11 +55,27 @@
 				</p>
 				<%
 					} else {
-						for (Map.Entry<String, Maestrano> entry : Maestrano.getConfigurations().entrySet()) {
 				%>
-				<a class="btn btn-large" href="<%=entry.getValue().ssoService().getInitPath()%>">Tenant: <%=entry.getKey()%></a>
+				<h3>Sandbox</h3>
+				Please go to <a href="http://sandbox.maestrano.com">http://sandbox.maestrano.com</a> to test this application.
 				<%
-					}
+						if (Maestrano.getConfigurations().isEmpty()){
+					
+				%>
+				<p>No marketplace found.</p>
+				<%
+						} else {
+				%>
+				<h3>Discovered Marketplaces</h3>
+				<%
+							for (Map.Entry<String, Maestrano> entry : Maestrano.getConfigurations().entrySet()) {
+								String host = entry.getValue().apiService().getHost();
+				%>
+				<h4><%=entry.getKey()%></h4>
+				<a href="<%= host%>"><%= host%></a>
+				<%
+							}
+						}
 					}
 				%>
 			</div>

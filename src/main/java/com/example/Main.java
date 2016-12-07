@@ -56,33 +56,10 @@ public class Main {
 	private static final String[] DEV_PLATFORM_ENVIRONMENT_VARIABLES = { "ENVIRONMENT_NAME", "ENVIRONMENT_KEY", "ENVIRONMENT_SECRET" };
 
 	private static void configureMaestrano(String appHost) throws MnoConfigurationException {
-		// Configure Maestrano API Using properties files
-		Properties properties = new Properties();
-
-		// Environment configuration (Maestrano UAT environment)
-		properties.setProperty("environment", "test");
-		properties.setProperty("app.host", appHost);
-		// Authentication
-		properties.setProperty("api.id", "app-1");
-		properties.setProperty("api.key", "gfcmbu8269wyi0hjazk4t7o1sndpvrqxl53e1");
-		// Add Connec! webhook notification path for your application
-		// Subscribe to certain entities (to receive updates from Connec!)
-		// These settings will automatically appear in your Metadata endpoint
-		// (see maestrano-java README)
-		properties.setProperty("webhook.connec.notificationsPath", "/maestrano/connec/notifications");
-		properties.setProperty("webhook.connec.subscriptions.company", "true");
-		properties.setProperty("webhook.connec.subscriptions.organizations", "true");
-		properties.setProperty("webhook.connec.subscriptions.people", "true");
-		// Configure maestrano for the default preset
-		Maestrano.configure(properties);
-
-		// For multi-tenant sintegration, define different presets using a properties file
-		Maestrano.configure("other-tenant", "other-tenant-config.properties");
-
 		if (hasEnvironments(DEV_PLATFORM_ENVIRONMENT_VARIABLES)) {
 			// AutoConfigure Maestrano API Using Development platform
 			Properties developmentPlatformProperties = new Properties();
-			developmentPlatformProperties.setProperty("dev-platform.host", "https://dev-platform.maestrano.io/");
+			developmentPlatformProperties.setProperty("dev-platform.host", "https://developer.maestrano.com");
 			Map<String, Maestrano> marketplaces = Maestrano.autoConfigure(developmentPlatformProperties);
 			logger.info("Marketplaces Configurations Found: " + marketplaces.keySet());
 		} else {
