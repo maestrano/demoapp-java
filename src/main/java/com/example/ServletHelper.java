@@ -36,14 +36,10 @@ public class ServletHelper {
 	 * @throws ServletException
 	 * @throws MnoConfigurationException
 	 */
-	public static Maestrano getConfiguration(Pattern pattern, HttpServletRequest request) throws MnoConfigurationException {
-		Matcher matcher = pattern.matcher(request.getRequestURI());
-		if (matcher.find()) {
-			String marketplace = matcher.group(1);
-			return Maestrano.get(marketplace);
-		} else {
-			return Maestrano.getDefault();
-		}
+	public static Maestrano getConfiguration(HttpServletRequest request) throws MnoConfigurationException {
+		String uri = request.getRequestURI();
+		String marketplace = uri.substring(uri.lastIndexOf('/') + 1);
+		return Maestrano.get(marketplace);
 	}
 
 	public static void writeError(HttpServletResponse resp, Throwable e) {

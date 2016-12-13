@@ -1,5 +1,6 @@
 <%@ page import="com.maestrano.*"%>
 <%@ page import="com.maestrano.account.*"%>
+<%@ page import="com.example.dto.*"%>
 <%@ page import="java.util.*"%>
 <%
 	HttpSession sess = request.getSession();
@@ -35,50 +36,47 @@
 	</div>
 	<div class="container" style="margin-top: 60px;">
 		<div class="row">
-			<div class="span12" style="text-align: center;">
+			<div class="span12"">
 				<%
 					if (!loggedIn) {
 				%>
-				<p class="text-error">You need to be logged in to see your Maestrano bills</p>
+				<p class="text-error">You need to be logged in to see Connec! Call Example</p>
 				<%
 					} else {
-						List<MnoBill> bills = (List<MnoBill>) request.getAttribute("billList");
-						if (bills == null) {
-							%>
-				<p class="text-error">Could not retrieve the Bills.</p>
-				<%
-						} else {
+						List<Organization> organizations = (List<Organization>) request.getAttribute("organizations");
 				%>
-				<p>
-					Below are the bills related to the group:
-					<%=sess.getAttribute("groupName")%></p>
+				<h2>Typed</h2>
+				<p>This is an example of a typed call to Connec! call to Get Organizations</p>
+				<pre>ConnecClient connecClient = ConnecClient.withPreset(marketplace);
+connecClient.all("organizations", groupId, Organizations.class);</pre>
 				<table class="table table-striped">
 					<thead>
 						<tr>
-							<th>UID</th>
-							<th>Description</th>
-							<th>Price (cents)</th>
-							<th>Currency</th>
+							<th>ID</th>
+							<th>Name</th>
 							<th>Created At</th>
+							<th>Updated At</th>
 						</tr>
 					</thead>
 					<tbody>
 						<%
-							for (MnoBill bill : bills) {
+							for (Organization organization : organizations) {
 						%>
 						<tr>
-							<td><%=bill.getId()%></td>
-							<td><%=bill.getDescription()%></td>
-							<td><%=bill.getPriceCents()%></td>
-							<td><%=bill.getCurrency()%></td>
-							<td><%=bill.getCreatedAt()%></td>
+							<td><%=organization.getId()%></td>
+							<td><%=organization.getName()%></td>
+							<td><%=organization.getCreatedAt()%></td>
+							<td><%=organization.getUpdatedAt()%></td>
 						</tr>
 						<%
-								}
 							}
 						%>
 					</tbody>
 				</table>
+				<h2>Raw</h2>
+				<p>This is an example of a raw call to Connec! call to Get Organizations</p>
+				<pre>connecClient.all("organizations", groupId);</pre>
+				<pre><%=request.getAttribute("organizationsJson")%></pre>
 				<%
 					}
 				%>

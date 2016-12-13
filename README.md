@@ -42,7 +42,7 @@ Windows
 set ENVIRONMENT_NAME=<your environment name>
 set ENVIRONMENT_KEY=<your environment key>
 set ENVIRONMENT_SECRET=<your environment name>
-set PORT=1238
+set PORT=1234
 target/bin/webapp.bat
 ```
 

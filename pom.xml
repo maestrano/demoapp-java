@@ -24,7 +24,7 @@
 		<dependency>
 			<groupId>com.maestrano</groupId>
 			<artifactId>maestrano-java</artifactId>
-			<version>1.0.0-RC2</version>
+			<version>1.0.0-RC3</version>
 		</dependency>
 		<!-- Google GSON -->
 		<dependency>
@@ -77,6 +77,13 @@
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-log4j12</artifactId>
 			<version>1.7.21</version>
+		</dependency>
+<!-- 		https://github.com/jsimone/webapp-runner -->
+		<dependency>
+			<groupId>com.github.jsimone</groupId>
+			<artifactId>webapp-runner</artifactId>
+			<version>8.5.5.0</version>
+			<scope>provided</scope>
 		</dependency>
 	</dependencies>
 

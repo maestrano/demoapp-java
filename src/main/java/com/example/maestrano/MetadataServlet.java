@@ -29,7 +29,7 @@ public class MetadataServlet extends HttpServlet {
 
 		Maestrano maestrano;
 		try {
-			maestrano = ServletHelper.getConfiguration(METADATA_PATTERN, request);
+			maestrano = ServletHelper.getConfiguration(request);
 		} catch (MnoConfigurationException e) {
 			ServletHelper.writeJson(response, "Unrecognized preset");
 			return;

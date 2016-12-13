@@ -1,7 +1,6 @@
 package com.example.maestrano;
 
 import java.io.IOException;
-import java.util.regex.Pattern;
 
 import javax.servlet.ServletException;
 import javax.servlet.ServletOutputStream;
@@ -30,9 +29,6 @@ public class SamlSsoServlet extends HttpServlet {
 	private static final Logger logger = LoggerFactory.getLogger(SamlSsoServlet.class);
 	private static final long serialVersionUID = 1L;
 
-	private static final Pattern INIT_PATTERN = Pattern.compile("/maestrano/auth/saml/init/([a-zA-Z0-9\\-]*)");
-	private static final Pattern CONSUME_PATTERN = Pattern.compile("/maestrano/auth/saml/consume/([a-zA-Z0-9\\-]*)");
-
 	/**
 	 * <ul>
 	 * <li>GET/maestrano/auth/saml/init</li>
@@ -47,7 +43,7 @@ public class SamlSsoServlet extends HttpServlet {
 		// Check for ID case first, since the All pattern would also match
 		Maestrano maestrano;
 		try {
-			maestrano = ServletHelper.getConfiguration(INIT_PATTERN, request);
+			maestrano = ServletHelper.getConfiguration(request);
 		} catch (MnoConfigurationException e) {
 			ServletHelper.writeError(response, e);
 			return;
@@ -75,7 +71,7 @@ public class SamlSsoServlet extends HttpServlet {
 		try {
 			Maestrano maestrano;
 			try {
-				maestrano = ServletHelper.getConfiguration(CONSUME_PATTERN, request);
+				maestrano = ServletHelper.getConfiguration(request);
 			} catch (MnoConfigurationException e) {
 				ServletHelper.writeError(response, e);
 				return;
@@ -98,7 +94,7 @@ public class SamlSsoServlet extends HttpServlet {
 				sess.setAttribute("groupId", mnoGroup.getUid());
 				sess.setAttribute("marketplace", maestrano.getPreset());
 				// Set Maestrano session (used for Single Logout)
-				MnoSession mnoSession = new MnoSession(request.getSession(), mnoUser);
+				MnoSession mnoSession = new MnoSession(maestrano.getPreset(), request.getSession(), mnoUser);
 				mnoSession.save();
 
 				// Redirect to you application home page

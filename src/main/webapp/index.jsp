@@ -26,6 +26,7 @@
 					if (loggedIn) {
 				%>
 				<li><a href="/bills">Bills</a></li>
+				<li><a href="/connec">Connec!</a></li>
 				<li><a href="/logout">Logout</a></li>
 				<%
 					}
@@ -37,7 +38,7 @@
 	</div>
 	<div class="container" style="margin-top: 60px;">
 		<div class="row">
-			<div class="span8 offset2"">
+			<div class="span8 offset2">
 				<%
 					if (loggedIn) {
 				%>
