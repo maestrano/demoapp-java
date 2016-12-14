@@ -53,7 +53,7 @@ public class Main {
 		startWebServer(webPort);
 	}
 
-	private static final String[] DEV_PLATFORM_ENVIRONMENT_VARIABLES = { "ENVIRONMENT_NAME", "ENVIRONMENT_KEY", "ENVIRONMENT_SECRET" };
+	private static final String[] DEV_PLATFORM_ENVIRONMENT_VARIABLES = {"MNO_DEVPL_ENV_KEY", "MNO_DEVPL_ENV_SECRET" };
 
 	private static void configureMaestrano(String appHost) throws MnoConfigurationException {
 		if (hasEnvironments(DEV_PLATFORM_ENVIRONMENT_VARIABLES)) {
