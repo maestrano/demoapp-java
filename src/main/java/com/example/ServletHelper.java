@@ -3,13 +3,12 @@ package com.example;
 import java.io.IOException;
 import java.util.Date;
 import java.util.TimeZone;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import javax.servlet.ServletException;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.commons.io.IOUtils;
 
@@ -22,6 +21,7 @@ import com.maestrano.json.DateDeserializer;
 import com.maestrano.json.DateSerializer;
 import com.maestrano.json.TimeZoneDeserializer;
 import com.maestrano.json.TimeZoneSerializer;
+import com.maestrano.sso.MnoSession;
 
 public class ServletHelper {
 	private ServletHelper() {
@@ -58,6 +58,11 @@ public class ServletHelper {
 		response.setContentType("application/json");
 		response.setCharacterEncoding("UTF-8");
 		GSON.toJson(object, response.getWriter());
+	}
+
+	public static boolean isLoggedIn(HttpServletRequest request) {
+		HttpSession session = request.getSession();
+		return Boolean.TRUE.equals(session.getAttribute("loggedIn"));
 	}
 
 }
