@@ -51,7 +51,7 @@ public class ConnecServlet extends HttpServlet {
 					return;
 				}
 				String groupId = (String) session.getAttribute("groupId");
-				ConnecClient connecClient = ConnecClient.withPreset(marketplace);
+				ConnecClient connecClient = new ConnecClient(marketplace);
 
 				Map<String, Object> organizationsMap = connecClient.all("organizations", groupId);
 				Gson gson = new GsonBuilder().setPrettyPrinting().create();

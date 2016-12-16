@@ -1,7 +1,6 @@
 package com.example.maestrano;
 
 import java.io.IOException;
-import java.util.regex.Pattern;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -22,7 +21,6 @@ public class MetadataServlet extends HttpServlet {
 
 	private static final Logger logger = LoggerFactory.getLogger(MetadataServlet.class);
 	private static final long serialVersionUID = 1L;
-	private static final Pattern METADATA_PATTERN = Pattern.compile("/maestrano/metadata/([a-zA-Z0-9\\-]*)");
 
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
