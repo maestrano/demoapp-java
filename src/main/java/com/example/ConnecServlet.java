@@ -29,17 +29,16 @@ import com.maestrano.sso.MnoSession;
 @WebServlet("/connec")
 public class ConnecServlet extends HttpServlet {
 
-	private static final Logger logger = LoggerFactory.getLogger(BillsServlet.class);
+	private static final Logger logger = LoggerFactory.getLogger(ConnecServlet.class);
 	private static final long serialVersionUID = 1L;
 	private static final String REDIRECTION_UL = "/connec/index.jsp";
 
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		HttpSession session = request.getSession();
-		boolean loggedIn = (session.getAttribute("loggedIn") != null && (Boolean) session.getAttribute("loggedIn"));
 		List<Organization> organizations = Collections.emptyList();
 		String organizationsJson = null;
-		if (loggedIn) {
+		if (ServletHelper.isLoggedIn(request)) {
 			// Example of Single Logout guarding
 			// Check the user session is still valid
 			String marketplace = (String) session.getAttribute("marketplace");

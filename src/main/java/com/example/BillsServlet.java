@@ -32,10 +32,9 @@ public class BillsServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		HttpSession session = request.getSession();
-		boolean loggedIn = (session.getAttribute("loggedIn") != null && (Boolean) session.getAttribute("loggedIn"));
 		List<MnoBill> billList = null;
 
-		if (loggedIn) {
+		if (ServletHelper.isLoggedIn(request)) {
 			// Example of Single Logout guarding
 			// Check the user session is still valid
 			String marketplace = (String) session.getAttribute("marketplace");

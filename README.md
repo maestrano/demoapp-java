@@ -8,11 +8,15 @@ That may be tested from our sandbox environment:
 
 https://sandbox.maestrano.com
 
+Please follow the documentation described here:
+
+https://maestrano.atlassian.net/wiki/display/DEV/Integrate+your+app+on+partner%27s+marketplaces
+
 ## Running the application locally
 
 Go to https://developer.maestrano.com
 
-Create a new Application, and a new Environment
+Create a new Application, and a new Environment. Make sure your environment is associated to the Marketplace: Maestrano Singapore.
 
 Retrieve your API Key and Secret
 
@@ -30,18 +34,18 @@ Then run it with (application uses an embedded tomcat):
 
 Linux
 ```
-export ENVIRONMENT_NAME=<your environment name>
-export ENVIRONMENT_KEY=<your environment key>
-export ENVIRONMENT_SECRET=<your environment name>
-export PORT=1238
+export MNO_DEVPL_ENV_NAME=<your environment name>
+export MNO_DEVPL_ENV_KEY=<your environment key>
+export MNO_DEVPL_ENV_SECRET=<your environment name>
+export PORT=1234
 sh target/bin/webapp
 ```
 
 Windows
 ```
-set ENVIRONMENT_NAME=<your environment name>
-set ENVIRONMENT_KEY=<your environment key>
-set ENVIRONMENT_SECRET=<your environment name>
+set MNO_DEVPL_ENV_NAME=<your environment name>
+set MNO_DEVPL_ENV_KEY=<your environment key>
+set MNO_DEVPL_ENV_SECRET=<your environment name>
 set PORT=1234
 target/bin/webapp.bat
 ```

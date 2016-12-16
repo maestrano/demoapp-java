@@ -58,9 +58,7 @@ public class Main {
 	private static void configureMaestrano(String appHost) throws MnoConfigurationException {
 		if (hasEnvironments(DEV_PLATFORM_ENVIRONMENT_VARIABLES)) {
 			// AutoConfigure Maestrano API Using Development platform
-			Properties developmentPlatformProperties = new Properties();
-			developmentPlatformProperties.setProperty("dev-platform.host", "https://developer.maestrano.com");
-			Map<String, Maestrano> marketplaces = Maestrano.autoConfigure(developmentPlatformProperties);
+			Map<String, Maestrano> marketplaces = Maestrano.autoConfigure();
 			logger.info("Marketplaces Configurations Found: " + marketplaces.keySet());
 		} else {
 			logger.info("Marketplace autoConfigure not activated. Environment variable not found: " + Arrays.toString(DEV_PLATFORM_ENVIRONMENT_VARIABLES));
