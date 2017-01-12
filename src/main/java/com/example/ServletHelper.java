@@ -21,7 +21,6 @@ import com.maestrano.json.DateDeserializer;
 import com.maestrano.json.DateSerializer;
 import com.maestrano.json.TimeZoneDeserializer;
 import com.maestrano.json.TimeZoneSerializer;
-import com.maestrano.sso.MnoSession;
 
 public class ServletHelper {
 	private ServletHelper() {

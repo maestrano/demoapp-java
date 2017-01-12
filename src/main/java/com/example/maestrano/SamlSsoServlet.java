@@ -92,9 +92,9 @@ public class SamlSsoServlet extends HttpServlet {
 				sess.setAttribute("surname", mnoUser.getLastName());
 				sess.setAttribute("groupName", mnoGroup.getName());
 				sess.setAttribute("groupId", mnoGroup.getUid());
-				sess.setAttribute("marketplace", maestrano.getPreset());
+				sess.setAttribute("marketplace", maestrano.getMarketplace());
 				// Set Maestrano session (used for Single Logout)
-				MnoSession mnoSession = new MnoSession(maestrano.getPreset(), request.getSession(), mnoUser);
+				MnoSession mnoSession = new MnoSession(maestrano.getMarketplace(), request.getSession(), mnoUser);
 				mnoSession.save();
 
 				// Redirect to you application home page
