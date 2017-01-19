@@ -1,4 +1,4 @@
-<%@ page import="com.maestrano.*"%>
+%@ page import="com.maestrano.*"%>
 <%@ page import="com.maestrano.account.*"%>
 <%@ page import="java.util.*"%>
 <%
