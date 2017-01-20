@@ -11,6 +11,9 @@ import org.springframework.boot.context.web.SpringBootServletInitializer;
 
 import com.maestrano.Maestrano;
 
+/**
+ * Entry point of the application
+ */
 @SpringBootApplication
 public class WebApplication extends SpringBootServletInitializer {
 	private static final Logger logger = LoggerFactory.getLogger(WebApplication.class);
@@ -23,9 +26,12 @@ public class WebApplication extends SpringBootServletInitializer {
 		SpringApplication.run(WebApplication.class, args);
 	}
 
+	/**
+	 * Spring Boot Configuration
+	 */
 	@Override
 	protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
-		return application.sources(WebApplication.class.getPackage().getName());
+		return application.sources(WebApplication.class);
 	}
 
 }

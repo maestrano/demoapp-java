@@ -21,6 +21,10 @@ import com.maestrano.exception.InvalidRequestException;
 import com.maestrano.exception.MnoConfigurationException;
 import com.maestrano.sso.MnoSession;
 
+/**
+ * Controller demonstrating calls to MnoBill client
+ *
+ */
 @Controller
 public class BillsController {
 

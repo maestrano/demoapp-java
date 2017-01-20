@@ -28,6 +28,10 @@ import com.maestrano.sso.MnoGroup;
 import com.maestrano.sso.MnoSession;
 import com.maestrano.sso.MnoUser;
 
+/**
+ * Controller demonstrating Saml SSO authentication with Maestrano
+ *
+ */
 @Controller
 public class SamlSsoController {
 
@@ -36,21 +40,9 @@ public class SamlSsoController {
 	@Autowired
 	private HttpSession httpSession;
 
-	/**
-	 * <ul>
-	 * <li>GET/maestrano/auth/saml/init</li>
-	 * <li>GET/maestrano/auth/saml/init/[marketplace]</li>
-	 * <ul>
-	 * 
-	 * @throws MnoConfigurationException
-	 * @throws XMLStreamException
-	 * 
-	 * @throws IOException
-	 * 
-	 */
 	@RequestMapping(value = "/maestrano/auth/saml/init/{marketplace}", method = RequestMethod.GET)
 	public ModelAndView init(@PathVariable("marketplace") String marketplace, @RequestParam Map<String, String> allRequestParams) throws MnoConfigurationException, XMLStreamException, IOException {
-
+		logger.trace("/maestrano/auth/saml/init/" + marketplace + " received: " + allRequestParams);
 		Maestrano maestrano = Maestrano.get(marketplace);
 		AuthRequest authReq = new AuthRequest(maestrano, allRequestParams);
 
@@ -59,27 +51,15 @@ public class SamlSsoController {
 
 	}
 
-	/**
-	 * <ul>
-	 * <li>GET/maestrano/auth/saml/consume</li>
-	 * <li>GET/maestrano/auth/saml/consume/[marketplace]</li>
-	 * <ul>
-	 * 
-	 * @throws MnoConfigurationException
-	 * @throws ParseException
-	 * @throws IOException
-	 * @throws SAXException
-	 * @throws ParserConfigurationException
-	 * @throws CertificateException
-	 * 
-	 */
 	@RequestMapping(value = "/maestrano/auth/saml/consume/{marketplace}", method = RequestMethod.POST)
 	public ModelAndView consume(@PathVariable("marketplace") String marketplace, @RequestParam(value = "SAMLResponse") String samlResponse)
 			throws MnoConfigurationException, ParseException, CertificateException, ParserConfigurationException, SAXException, IOException {
 
+		logger.debug("/maestrano/auth/saml/consume/" + marketplace);
+
 		Maestrano maestrano = Maestrano.get(marketplace);
 		Response authResp = Response.loadFromBase64XML(maestrano.ssoService(), samlResponse);
-		logger.trace("/maestrano/auth/saml/consume received: " + authResp);
+		logger.trace("/maestrano/auth/saml/consume/" + marketplace + " received: " + authResp);
 		if (authResp.isValid()) {
 
 			// Build maestrano user and group objects

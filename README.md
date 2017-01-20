@@ -28,7 +28,7 @@ Set up the App endpoints:
 - Host: http://localhost:1234j
 - SSO Init Path: /maestrano/auth/saml/init/%{marketplace}
 - SSO Consume Path: /maestrano/auth/saml/init/%{marketplace}
-
+- Connec Notification Path: /maestrano/connec/notifications/%{marketplace}
 Then run it with (application uses [spring boot](https://projects.spring.io/spring-boot):
 
 Linux
@@ -55,6 +55,16 @@ https://sandbox.maestrano.com
 Add your App from the marketplace
 
 Start the application
+
+## Webhook Testing
+
+If you want to test webhooks, you may use [ngrok](https://ngrok.com)
+```
+ngrok http 1234
+```
+and replace *Host* by the url returned by ngrok (something like https://xxxxxxx.ngrok.io)
+You will be able to intercept the calls in `WebhookController.java`
+
 
 ## Deploy the application on heroku
 ```

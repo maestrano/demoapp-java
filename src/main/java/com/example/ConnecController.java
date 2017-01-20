@@ -22,6 +22,10 @@ import com.maestrano.exception.MnoException;
 import com.maestrano.net.ConnecClient;
 import com.maestrano.sso.MnoSession;
 
+/**
+ * Controller used to demonstrate calls to Connec! API
+ * 
+ */
 @Controller
 public class ConnecController {
 
