@@ -27,6 +27,7 @@
 				%>
 				<li><a href="/bills">Bills</a></li>
 				<li><a href="/connec">Connec!</a></li>
+				<li><a href="/webhooks">Webhooks!</a></li>
 				<li><a href="/logout">Logout</a></li>
 				<%
 					}

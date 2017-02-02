@@ -1,6 +1,5 @@
-%@ page import="com.maestrano.*"%>
-<%@ page import="com.maestrano.account.*"%>
 <%@ page import="java.util.*"%>
+<%@ page import="com.example.WebhookManager.WebhookInfo"%>
 <%
 	HttpSession sess = request.getSession();
 %>
@@ -40,39 +39,36 @@
 				<%
 					if (!loggedIn) {
 				%>
-				<p class="text-error">You need to be logged in to see your Maestrano bills</p>
+				<p class="text-error">You need to be logged in to see your webhooks</p>
 				<%
 					} else {
-						List<MnoBill> bills = (List<MnoBill>) request.getAttribute("billList");
-						if (bills == null) {
+						Collection<WebhookInfo> webhooks = (Collection<WebhookInfo>) request.getAttribute("webhooks");
+						if (webhooks == null) {
 							%>
-				<p class="text-error">Could not retrieve the Bills.</p>
+				<p class="text-error">Could not retrieve the webhooks.</p>
 				<%
 						} else {
 				%>
 				<p>
-					Below are the bills related to the group:
-					<%=sess.getAttribute("groupName")%></p>
+					Below are the webhooks received for the group: <%=sess.getAttribute("groupName")%> <%=sess.getAttribute("groupId")%></p>
 				<table class="table table-striped">
 					<thead>
 						<tr>
-							<th>UID</th>
-							<th>Description</th>
-							<th>Price (cents)</th>
-							<th>Currency</th>
-							<th>Created At</th>
+							<th>Date</th>
+							<th>Entity Name</th>
+							<th>Entity Id</th>
+							<th>Entity</th>we
 						</tr>
 					</thead>
 					<tbody>
 						<%
-							for (MnoBill bill : bills) {
+							for (WebhookInfo webhook : webhooks) {
 						%>
 						<tr>
-							<td><%=bill.getId()%></td>
-							<td><%=bill.getDescription()%></td>
-							<td><%=bill.getPriceCents()%></td>
-							<td><%=bill.getCurrency()%></td>
-							<td><%=bill.getCreatedAt()%></td>
+							<td><%=webhook.getDate()%></td>
+							<td><%=webhook.getEntityName()%></td>
+							<td><%=webhook.getEntity().get("id")%></td>
+							<td><%=webhook.getEntity().toString()%></td>
 						</tr>
 						<%
 								}
