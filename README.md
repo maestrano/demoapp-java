@@ -13,7 +13,7 @@ Please follow the documentation described here: https://maestrano.atlassian.net/
 - Maven 3 or later
 
 ### Stack
-- Spring Boot
+- [Spring Boot](https://projects.spring.io/spring-boot)
 - Java
 
 ### Guide
@@ -29,7 +29,8 @@ Set up the App endpoints:
 - SSO Init Path: /maestrano/auth/saml/init/%{marketplace}
 - SSO Consume Path: /maestrano/auth/saml/init/%{marketplace}
 - Connec Notification Path: /maestrano/connec/notifications/%{marketplace}
-Then run it with (application uses [spring boot](https://projects.spring.io/spring-boot):
+
+Then run it with:
 
 Linux
 ```
