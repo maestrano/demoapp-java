@@ -25,7 +25,7 @@ Create a new Application, and a new Environment. Make sure your environment is a
 Retrieve your API Key and Secret
 
 Set up the App endpoints:
-- Host: http://localhost:1234j
+- Host: http://localhost:1234
 - SSO Init Path: /maestrano/auth/saml/init/%{marketplace}
 - SSO Consume Path: /maestrano/auth/saml/init/%{marketplace}
 - Connec Notification Path: /maestrano/connec/notifications/%{marketplace}
