@@ -18,9 +18,10 @@ import com.example.dto.Organizations;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.maestrano.Maestrano;
+import com.maestrano.configuration.Preset;
 import com.maestrano.exception.MnoException;
 import com.maestrano.net.ConnecClient;
-import com.maestrano.sso.MnoSession;
+import com.maestrano.sso.Session;
 
 /**
  * Controller used to demonstrate calls to Connec! API
@@ -39,10 +40,10 @@ public class ConnecController {
 		if (Boolean.TRUE.equals(httpSession.getAttribute("loggedIn"))) {
 			String marketplace = (String) httpSession.getAttribute("marketplace");
 
-			Maestrano maestrano = Maestrano.get(marketplace);
-			MnoSession mnoSession = new MnoSession(marketplace, httpSession);
-			if (!mnoSession.isValid()) {
-				String initUrl = maestrano.ssoService().getInitUrl();
+			Preset preset = Maestrano.get(marketplace);
+			Session session = Session.loadFromHttpSession(preset, httpSession);
+			if (!session.isValid()) {
+				String initUrl = preset.getSso().getInitUrl();
 				return new ModelAndView("redirect:" + initUrl);
 			}
 			String groupId = (String) httpSession.getAttribute("groupId");

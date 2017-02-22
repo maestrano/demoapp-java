@@ -10,6 +10,7 @@ import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.context.web.SpringBootServletInitializer;
 
 import com.maestrano.Maestrano;
+import com.maestrano.configuration.Preset;
 
 /**
  * Entry point of the application
@@ -21,7 +22,7 @@ public class WebApplication extends SpringBootServletInitializer {
 	public static void main(String[] args) throws Exception {
 
 		logger.info("Autoconfiguring Maestrano");
-		Map<String, Maestrano> marketplaces = Maestrano.autoConfigure();
+		Map<String, Preset> marketplaces = Maestrano.autoConfigure();
 		logger.info("Marketplaces Configurations Found: " + marketplaces.keySet());
 		SpringApplication.run(WebApplication.class, args);
 	}

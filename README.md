@@ -73,3 +73,10 @@ heroku config:set MNO_DEVPL_ENV_NAME=<your environment name> MNO_DEVPL_ENV_KEY=<
 git push heroku master
 
 ```
+
+## OpenId example
+
+`com.example.OpenIdController` gives an example of OpenId SSO implementation.
+See: [Use OpenID for SSO](https://maestrano.atlassian.net/wiki/display/DEV/Use+OpenID+for+SSO) for more informations.
+
+

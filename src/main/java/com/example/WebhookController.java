@@ -24,6 +24,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.example.WebhookManager.WebhookInfo;
 import com.maestrano.Maestrano;
+import com.maestrano.configuration.Preset;
 import com.maestrano.exception.MnoException;
 
 /**
@@ -53,7 +54,7 @@ public class WebhookController {
 		if (Boolean.TRUE.equals(httpSession.getAttribute("loggedIn"))) {
 			String groupId = (String) httpSession.getAttribute("groupId");
 			webhooks = webhookManager.get(groupId);
-		}
+		}	
 		model.addAttribute("webhooks", webhooks);
 		return new ModelAndView("webhooks");
 	}
@@ -65,8 +66,8 @@ public class WebhookController {
 		// The best approach would be to use spring security
 		// https://spring.io/guides/gs/securing-web/
 		// http://www.baeldung.com/spring-security-authentication-provider
-		Maestrano maestrano = Maestrano.get(marketplace);
-		if (maestrano.authenticate(httpRequest)) {
+		Preset preset = Maestrano.get(marketplace);
+		if (preset.authenticate(httpRequest)) {
 			// Process webhook
 			logger.trace("/maestrano/connec/notifications/" + marketplace + " received: " + entitiesPerEntityName);
 			// {
