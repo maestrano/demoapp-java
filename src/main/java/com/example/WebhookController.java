@@ -1,5 +1,6 @@
 package com.example;
 
+import java.text.MessageFormat;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -32,21 +34,20 @@ import com.maestrano.exception.MnoException;
  */
 @Controller
 public class WebhookController {
-	
+
 	private static final Logger logger = LoggerFactory.getLogger(WebhookController.class);
-	
+
 	@Autowired
 	WebhookManager webhookManager;
 
 	@Autowired
 	private HttpSession httpSession;
-	
+
 	@ResponseStatus(value = HttpStatus.UNAUTHORIZED, reason = "Invalid Maestrano Credentials") // 401
 	public class UnauthorizedException extends Exception {
 		private static final long serialVersionUID = 1L;
 	}
 
-	
 	@RequestMapping(value = "/webhooks", method = RequestMethod.GET)
 	public ModelAndView webhook(ModelMap model) throws MnoException {
 		Collection<WebhookInfo> webhooks = null;
@@ -57,9 +58,53 @@ public class WebhookController {
 		model.addAttribute("webhooks", webhooks);
 		return new ModelAndView("webhooks");
 	}
+
+
+	@RequestMapping(value = "/maestrano/account/groups/{groupId}/{marketplace}", method = RequestMethod.DELETE)
+	public @ResponseBody String listenAccountDeletion(
+			HttpServletRequest httpRequest,
+			@PathVariable("marketplace") String marketplace,
+			@PathVariable("groupId") String groupId)
+			throws MnoException, UnauthorizedException {
+		// Manual Basic authentication to demonstrate that this endpoint needs to be password protected
+		// The best approach would be to use spring security
+		// https://spring.io/guides/gs/securing-web/
+		// http://www.baeldung.com/spring-security-authentication-provider
+		Maestrano maestrano = Maestrano.get(marketplace);
+		if (maestrano.authenticate(httpRequest)) {
+			logger.trace(MessageFormat.format("/maestrano/account/groups/{0}/{1} - Account Deletion Received", groupId,  marketplace));
+		} else {
+			logger.trace(MessageFormat.format("/maestrano/account/groups/{0}/{1} - authentication failed", groupId, marketplace));
+			throw new UnauthorizedException();
+		}
+		return "OK";
+	}
+
 	
+	@RequestMapping(value = "/maestrano/account/groups/{groupId}/users/{userId}/{marketplace}", method = RequestMethod.DELETE)
+	public @ResponseBody String listenUserDeletion(
+			HttpServletRequest httpRequest,
+			@PathVariable("marketplace") String marketplace,
+			@PathVariable("groupId") String groupId,
+			@PathVariable("userId") String userId)
+			throws MnoException, UnauthorizedException {
+		// Manual Basic authentication to demonstrate that this endpoint needs to be password protected
+		// The best approach would be to use spring security
+		// https://spring.io/guides/gs/securing-web/
+		// http://www.baeldung.com/spring-security-authentication-provider
+		Maestrano maestrano = Maestrano.get(marketplace);
+		if (maestrano.authenticate(httpRequest)) {
+			logger.trace(MessageFormat.format("/maestrano/account/groups/{0}/users/{1}/{2} - User Account Deletion Received", groupId, userId, marketplace));
+			return "OK";
+		} else {
+			logger.trace(MessageFormat.format("/maestrano/account/groups/{0}/users/{1}/{2} - authentication failed", groupId, userId, marketplace));
+			throw new UnauthorizedException();
+		}
+
+	}
+
 	@RequestMapping(value = "/maestrano/connec/notifications/{marketplace}", method = RequestMethod.POST)
-	public String process(HttpServletRequest httpRequest, @PathVariable("marketplace") String marketplace, @RequestBody Map<String, List<Map<String, Object>>> entitiesPerEntityName)
+	public @ResponseBody String listenConnecWebhookNotification(HttpServletRequest httpRequest, @PathVariable("marketplace") String marketplace, @RequestBody Map<String, List<Map<String, Object>>> entitiesPerEntityName)
 			throws MnoException, UnauthorizedException {
 		// Manual Basic authentication to demonstrate that this endpoint needs to be password protected
 		// The best approach would be to use spring security
@@ -93,4 +138,5 @@ public class WebhookController {
 			throw new UnauthorizedException();
 		}
 	}
+
 }
