@@ -9,8 +9,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.maestrano.Maestrano;
+import com.maestrano.configuration.Preset;
 import com.maestrano.exception.MnoConfigurationException;
-import com.maestrano.sso.MnoSession;
+import com.maestrano.sso.Session;
 
 @Controller
 public class HomeController {
@@ -28,8 +30,9 @@ public class HomeController {
 		ModelAndView modelAndView = new ModelAndView("home");
 		if (Boolean.TRUE.equals(httpSession.getAttribute("loggedIn"))) {
 			String marketplace = (String) httpSession.getAttribute("marketplace");
-			MnoSession mnoSession = new MnoSession(marketplace, httpSession);
-			String redirectUrl = mnoSession.getLogoutUrl();
+			Preset preset = Maestrano.get(marketplace);
+			Session session = Session.loadFromHttpSession(preset, httpSession);
+			String redirectUrl = session.getLogoutUrl();
 			modelAndView = new ModelAndView("redirect:" + redirectUrl);
 		}
 		httpSession.invalidate();

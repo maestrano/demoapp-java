@@ -1,4 +1,5 @@
 <%@ page import="com.maestrano.Maestrano"%>
+<%@ page import="com.maestrano.configuration.Preset"%>
 <%@ page import="java.util.Map"%>
 <%
 	HttpSession sess = request.getSession();
@@ -27,7 +28,7 @@
 				%>
 				<li><a href="/bills">Bills</a></li>
 				<li><a href="/connec">Connec!</a></li>
-				<li><a href="/webhooks">Webhooks!</a></li>
+				<li><a href="/webhooks">Webhooks</a></li>
 				<li><a href="/logout">Logout</a></li>
 				<%
 					}
@@ -70,8 +71,8 @@
 				%>
 				<h3>Discovered Marketplaces</h3>
 				<%
-							for (Map.Entry<String, Maestrano> entry : Maestrano.getConfigurations().entrySet()) {
-								String host = entry.getValue().apiService().getHost();
+							for (Map.Entry<String, Preset> entry : Maestrano.getConfigurations().entrySet()) {
+								String host = entry.getValue().getApi().getHost();
 				%>
 				<h4><%=entry.getKey()%></h4>
 				<a href="<%= host%>"><%= host%></a>

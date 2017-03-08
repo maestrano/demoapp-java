@@ -1,5 +1,4 @@
-%@ page import="com.maestrano.*"%>
-<%@ page import="com.maestrano.account.*"%>
+<%@ page import="com.maestrano.account.Bill"%>
 <%@ page import="java.util.*"%>
 <%
 	HttpSession sess = request.getSession();
@@ -26,7 +25,7 @@
 				%>
 				<li><a href="/bills">Bills</a></li>
 				<li><a href="/connec">Connec!</a></li>
-				<li><a href="/webhooks">Webhooks!</a></li>
+				<li><a href="/webhooks">Webhooks</a></li>
 				<li><a href="/logout">Logout</a></li>
 				<%
 					}
@@ -43,7 +42,7 @@
 				<p class="text-error">You need to be logged in to see your Maestrano bills</p>
 				<%
 					} else {
-						List<MnoBill> bills = (List<MnoBill>) request.getAttribute("billList");
+						List<Bill> bills = (List<Bill>) request.getAttribute("billList");
 						if (bills == null) {
 							%>
 				<p class="text-error">Could not retrieve the Bills.</p>
@@ -65,7 +64,7 @@
 					</thead>
 					<tbody>
 						<%
-							for (MnoBill bill : bills) {
+							for (Bill bill : bills) {
 						%>
 						<tr>
 							<td><%=bill.getId()%></td>
