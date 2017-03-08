@@ -71,8 +71,8 @@ public class WebhookController {
 		// The best approach would be to use spring security
 		// https://spring.io/guides/gs/securing-web/
 		// http://www.baeldung.com/spring-security-authentication-provider
-		Maestrano maestrano = Maestrano.get(marketplace);
-		if (maestrano.authenticate(httpRequest)) {
+		Preset preset = Maestrano.get(marketplace);
+		if (preset.authenticate(httpRequest)) {
 			logger.trace(MessageFormat.format("/maestrano/account/groups/{0}/{1} - Account Deletion Received", groupId,  marketplace));
 		} else {
 			logger.trace(MessageFormat.format("/maestrano/account/groups/{0}/{1} - authentication failed", groupId, marketplace));
@@ -93,8 +93,8 @@ public class WebhookController {
 		// The best approach would be to use spring security
 		// https://spring.io/guides/gs/securing-web/
 		// http://www.baeldung.com/spring-security-authentication-provider
-		Maestrano maestrano = Maestrano.get(marketplace);
-		if (maestrano.authenticate(httpRequest)) {
+		Preset preset = Maestrano.get(marketplace);
+		if (preset.authenticate(httpRequest)) {
 			logger.trace(MessageFormat.format("/maestrano/account/groups/{0}/users/{1}/{2} - User Account Deletion Received", groupId, userId, marketplace));
 			return "OK";
 		} else {
