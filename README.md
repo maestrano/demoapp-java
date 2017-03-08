@@ -77,6 +77,6 @@ git push heroku master
 ## OpenId example
 
 `com.example.OpenIdController` gives an example of OpenId SSO implementation.
-See: [Use OpenID for SSO](https://maestrano.atlassian.net/wiki/display/DEV/Use+OpenID+for+SSO) for more informations.
+See: [Use OpenID for SSO](https://maestrano.atlassian.net/wiki/display/DEV/Use+OpenID+for+SSO) for more information.
 
 
