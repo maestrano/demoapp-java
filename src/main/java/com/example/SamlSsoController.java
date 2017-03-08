@@ -71,8 +71,8 @@ public class SamlSsoController {
 			httpSession.setAttribute("groupId", group.getUid());
 			httpSession.setAttribute("marketplace", preset.getMarketplace());
 			// Set Maestrano session (used for Single Logout)
-			Session Session = new Session(preset, user);
-			Session.save(httpSession);
+			Session session = new Session(preset, user);
+			session.save(httpSession);
 
 			// Redirect to you application home page
 			return new ModelAndView("redirect:/");
