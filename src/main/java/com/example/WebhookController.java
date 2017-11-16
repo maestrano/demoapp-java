@@ -31,7 +31,6 @@ import com.maestrano.exception.MnoException;
 
 /**
  * Controller used to demonstrate Connec! webhook process See https://maestrano.atlassian.net/wiki/display/DEV/Connec%21+Webhook
- *
  */
 @Controller
 public class WebhookController {
@@ -55,17 +54,13 @@ public class WebhookController {
 		if (Boolean.TRUE.equals(httpSession.getAttribute("loggedIn"))) {
 			String groupId = (String) httpSession.getAttribute("groupId");
 			webhooks = webhookManager.get(groupId);
-		}	
+		}
 		model.addAttribute("webhooks", webhooks);
 		return new ModelAndView("webhooks");
 	}
 
-
 	@RequestMapping(value = "/maestrano/account/groups/{groupId}/{marketplace}", method = RequestMethod.DELETE)
-	public @ResponseBody String listenAccountDeletion(
-			HttpServletRequest httpRequest,
-			@PathVariable("marketplace") String marketplace,
-			@PathVariable("groupId") String groupId)
+	public @ResponseBody String listenAccountDeletion(HttpServletRequest httpRequest, @PathVariable("marketplace") String marketplace, @PathVariable("groupId") String groupId)
 			throws MnoException, UnauthorizedException {
 		// Manual Basic authentication to demonstrate that this endpoint needs to be password protected
 		// The best approach would be to use spring security
@@ -73,7 +68,7 @@ public class WebhookController {
 		// http://www.baeldung.com/spring-security-authentication-provider
 		Preset preset = Maestrano.get(marketplace);
 		if (preset.authenticate(httpRequest)) {
-			logger.trace(MessageFormat.format("/maestrano/account/groups/{0}/{1} - Account Deletion Received", groupId,  marketplace));
+			logger.trace(MessageFormat.format("/maestrano/account/groups/{0}/{1} - Account Deletion Received", groupId, marketplace));
 		} else {
 			logger.trace(MessageFormat.format("/maestrano/account/groups/{0}/{1} - authentication failed", groupId, marketplace));
 			throw new UnauthorizedException();
@@ -81,14 +76,9 @@ public class WebhookController {
 		return "OK";
 	}
 
-	
 	@RequestMapping(value = "/maestrano/account/groups/{groupId}/users/{userId}/{marketplace}", method = RequestMethod.DELETE)
-	public @ResponseBody String listenUserDeletion(
-			HttpServletRequest httpRequest,
-			@PathVariable("marketplace") String marketplace,
-			@PathVariable("groupId") String groupId,
-			@PathVariable("userId") String userId)
-			throws MnoException, UnauthorizedException {
+	public @ResponseBody String listenUserDeletion(HttpServletRequest httpRequest, @PathVariable("marketplace") String marketplace, @PathVariable("groupId") String groupId,
+			@PathVariable("userId") String userId) throws MnoException, UnauthorizedException {
 		// Manual Basic authentication to demonstrate that this endpoint needs to be password protected
 		// The best approach would be to use spring security
 		// https://spring.io/guides/gs/securing-web/
@@ -101,12 +91,11 @@ public class WebhookController {
 			logger.trace(MessageFormat.format("/maestrano/account/groups/{0}/users/{1}/{2} - authentication failed", groupId, userId, marketplace));
 			throw new UnauthorizedException();
 		}
-
 	}
 
 	@RequestMapping(value = "/maestrano/connec/notifications/{marketplace}", method = RequestMethod.POST)
-	public @ResponseBody String listenConnecWebhookNotification(HttpServletRequest httpRequest, @PathVariable("marketplace") String marketplace, @RequestBody Map<String, List<Map<String, Object>>> entitiesPerEntityName)
-			throws MnoException, UnauthorizedException {
+	public @ResponseBody String listenConnecWebhookNotification(HttpServletRequest httpRequest, @PathVariable("marketplace") String marketplace,
+			@RequestBody Map<String, List<Map<String, Object>>> entitiesPerEntityName) throws MnoException, UnauthorizedException {
 		// Manual Basic authentication to demonstrate that this endpoint needs to be password protected
 		// The best approach would be to use spring security
 		// https://spring.io/guides/gs/securing-web/
@@ -139,5 +128,4 @@ public class WebhookController {
 			throw new UnauthorizedException();
 		}
 	}
-
 }

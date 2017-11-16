@@ -26,10 +26,7 @@ import com.maestrano.sso.Group;
 import com.maestrano.sso.Session;
 import com.maestrano.sso.User;
 
-/**
- * Controller demonstrating Saml SSO authentication with Maestrano
- *
- */
+/** Controller demonstrating Saml SSO authentication with Maestrano */
 @Controller
 public class SamlSsoController {
 
@@ -46,14 +43,12 @@ public class SamlSsoController {
 
 		String ssoUrl = authReq.getRedirectUrl();
 		return new ModelAndView("redirect:" + ssoUrl);
-
 	}
 
 	@RequestMapping(value = "/maestrano/auth/saml/consume/{marketplace}", method = RequestMethod.POST)
 	public ModelAndView consume(@PathVariable("marketplace") String marketplace, @RequestParam(value = "SAMLResponse") String samlResponse) throws MnoException {
 
 		logger.debug("/maestrano/auth/saml/consume/" + marketplace);
-
 		Preset preset = Maestrano.get(marketplace);
 		Response authResp = preset.getSso().buildResponse(samlResponse);
 		logger.trace("/maestrano/auth/saml/consume/" + marketplace + " received: " + authResp);
@@ -65,8 +60,12 @@ public class SamlSsoController {
 
 			// No database model in this project. We just keep the relevant details in session
 			httpSession.setAttribute("loggedIn", true);
+			httpSession.setAttribute("uid", user.getUid());
 			httpSession.setAttribute("name", user.getFirstName());
 			httpSession.setAttribute("surname", user.getLastName());
+			httpSession.setAttribute("email", user.getEmail());
+			httpSession.setAttribute("role", user.getGroupRole());
+
 			httpSession.setAttribute("groupName", group.getName());
 			httpSession.setAttribute("groupId", group.getUid());
 			httpSession.setAttribute("marketplace", preset.getMarketplace());
@@ -79,7 +78,5 @@ public class SamlSsoController {
 		} else {
 			return new ModelAndView("SAML Response is invalid");
 		}
-
 	}
-
 }

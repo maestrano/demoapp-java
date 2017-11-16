@@ -22,10 +22,7 @@ import com.maestrano.exception.InvalidRequestException;
 import com.maestrano.exception.MnoConfigurationException;
 import com.maestrano.sso.Session;
 
-/**
- * Controller demonstrating calls to Bill client
- *
- */
+/** Controller demonstrating calls to Bill client */
 @Controller
 public class BillsController {
 
@@ -51,11 +48,9 @@ public class BillsController {
 			Map<String, String> filter = new HashMap<String, String>();
 			filter.put("groupId", (String) httpSession.getAttribute("groupId"));
 			billList = Bill.client(preset).all(filter);
-
 		}
 		model.addAttribute("billList", billList);
 
 		return new ModelAndView("bills");
-
 	}
 }

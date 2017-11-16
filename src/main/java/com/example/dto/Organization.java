@@ -39,5 +39,4 @@ public class Organization {
 	public void setUpdatedAt(Date updatedAt) {
 		this.updatedAt = updatedAt;
 	}
-
 }
