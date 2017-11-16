@@ -12,5 +12,4 @@ public class Organizations {
 	public void setOrganizations(List<Organization> organizations) {
 		this.organizations = organizations;
 	}
-
 }

@@ -39,4 +39,9 @@ public class HomeController {
 		return modelAndView;
 	}
 
+	@RequestMapping(value = "/me", method = RequestMethod.GET)
+	public String me(ModelMap model) {
+		return "me";
+	}
+
 }

@@ -43,10 +43,7 @@ import com.maestrano.sso.Group;
 import com.maestrano.sso.Session;
 import com.maestrano.sso.User;
 
-/**
- * Controller demonstrating Open SSO authentication with Maestrano
- *
- */
+/** Controller demonstrating Open SSO authentication with Maestrano */
 @Controller
 public class OpenIdController {
 
@@ -106,11 +103,11 @@ public class OpenIdController {
 			String opEndpoint = authReq.getDestinationUrl(true);
 			return new ModelAndView("redirect:" + opEndpoint);
 		}
-
 	}
 
 	@RequestMapping(value = "/maestrano/auth/openid/consume/{marketplace}", method = RequestMethod.POST)
-	public ModelAndView consume(@PathVariable("marketplace") String marketplace, HttpServletRequest request) throws MnoException, MessageException, DiscoveryException, AssociationException, ParseException {
+	public ModelAndView consume(@PathVariable("marketplace") String marketplace, HttpServletRequest request)
+			throws MnoException, MessageException, DiscoveryException, AssociationException, ParseException {
 
 		logger.debug("/maestrano/auth/openid/consume/" + marketplace);
 
@@ -118,7 +115,7 @@ public class OpenIdController {
 		// Retrieving the parameter list
 		ParameterList parameterList = new ParameterList(request.getParameterMap());
 		AuthSuccess authSuccess = AuthSuccess.createAuthSuccess(parameterList);
-		//Extracnt parameters from the parameters list
+		// Extracnt parameters from the parameters list
 		Map<String, String> parameters = extractParameters(parameterList);
 		User user = loadUserFromParameters(parameters);
 		Group group = loadGroupFromParameters(parameters);
@@ -138,20 +135,13 @@ public class OpenIdController {
 
 		// Redirect to you application home page
 		return new ModelAndView("redirect:/");
-
 	}
 
 	/**
-	 * 
-	 * parameterList contains a map containing
-	 * openid.ax.type.ext1:"http://openid.net/schema/namePerson/first"
-	 * openid.ax.value.ext1:"John"
-	 * openid.ax.type.ext2:"http://openid.net/schema/namePerson/last"
-	 * openid.ax.value.ext2:"Doe"
-	 * this returns a map
-	 * "http://openid.net/schema/namePerson/first" : "John"
+	 * parameterList contains a map containing openid.ax.type.ext1:"http://openid.net/schema/namePerson/first" openid.ax.value.ext1:"John"
+	 * openid.ax.type.ext2:"http://openid.net/schema/namePerson/last" openid.ax.value.ext2:"Doe" this returns a map "http://openid.net/schema/namePerson/first" : "John"
 	 * "http://openid.net/schema/namePerson/last" : "Doe"
-	 * 
+	 *
 	 * @return
 	 */
 	public Map<String, String> extractParameters(ParameterList parameterList) {

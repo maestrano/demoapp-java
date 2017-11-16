@@ -23,10 +23,7 @@ import com.maestrano.exception.MnoException;
 import com.maestrano.net.ConnecClient;
 import com.maestrano.sso.Session;
 
-/**
- * Controller used to demonstrate calls to Connec! API
- * 
- */
+/** Controller used to demonstrate calls to Connec! API */
 @Controller
 public class ConnecController {
 
@@ -61,7 +58,5 @@ public class ConnecController {
 		model.addAttribute("organizationsJson", organizationsJson);
 
 		return new ModelAndView("connec");
-
 	}
-
 }

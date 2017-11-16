@@ -11,15 +11,15 @@ import org.springframework.boot.context.web.SpringBootServletInitializer;
 
 import com.maestrano.Maestrano;
 import com.maestrano.configuration.Preset;
+import com.maestrano.exception.MnoConfigurationException;
 
-/**
- * Entry point of the application
- */
+/** Entry point of the application */
 @SpringBootApplication
 public class WebApplication extends SpringBootServletInitializer {
 	private static final Logger logger = LoggerFactory.getLogger(WebApplication.class);
 
-	public static void main(String[] args) throws Exception {
+	public static void main(String[] args) throws MnoConfigurationException {
+		System.out.println(BigStringUtils.render("Maestrano " + Maestrano.getVersion()));
 
 		logger.info("Autoconfiguring Maestrano");
 		Map<String, Preset> marketplaces = Maestrano.autoConfigure();
@@ -27,12 +27,9 @@ public class WebApplication extends SpringBootServletInitializer {
 		SpringApplication.run(WebApplication.class, args);
 	}
 
-	/**
-	 * Spring Boot Configuration
-	 */
+	/** Spring Boot Configuration */
 	@Override
 	protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
 		return application.sources(WebApplication.class);
 	}
-
 }

@@ -36,7 +36,6 @@ public class WebhookManager {
 		public Map<String, Object> getEntity() {
 			return entity;
 		}
-
 	}
 
 	private final LoadingCache<String, CircularFifoQueue<WebhookInfo>> webhooks = CacheBuilder.newBuilder().maximumSize(1000).build(new CacheLoader<String, CircularFifoQueue<WebhookInfo>>() {

@@ -18,11 +18,16 @@
 	</properties>
 
 	<dependencies>
+		<dependency>
+			<groupId>com.github.lalyos</groupId>
+			<artifactId>jfiglet</artifactId>
+			<version>0.0.8</version>
+		</dependency>
 		<!-- Maestrano API -->
 		<dependency>
 			<groupId>com.maestrano</groupId>
 			<artifactId>maestrano-java</artifactId>
-			<version>2.0.0-RC1</version>
+			<version>2.0.0-RC2</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.commons</groupId>
